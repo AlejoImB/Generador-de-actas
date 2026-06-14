@@ -37,6 +37,10 @@ class TemplateIn(BaseModel):
     icon: str = "◫"
     schema: dict                # {"sections": [...]}
 
+class TemplatePatchIn(BaseModel):
+    name: str
+    description: str = ""
+
 
 class TemplateOut(BaseModel):
     id: str

@@ -4,7 +4,7 @@ from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, Form
 from sqlalchemy.orm import Session
 from app.db.database import get_db
 from app.models.models import Template, User
-from app.schemas.schemas import TemplateIn, TemplateOut
+from app.schemas.schemas import TemplateIn, TemplateOut, TemplatePatchIn
 from app.api.deps import get_current_user
 from app.services.word_service import extract_schema_from_docx
 
@@ -66,6 +66,18 @@ def update_template(template_id: str, body: TemplateIn, db: Session = Depends(ge
         raise HTTPException(404, "Plantilla no encontrada")
     t.name, t.description, t.icon, t.schema = body.name, body.description, body.icon, body.schema
     t.version += 1
+    db.commit(); db.refresh(t)
+    return t
+
+
+@router.patch("/{template_id}", response_model=TemplateOut)
+def patch_template(template_id: str, body: TemplatePatchIn, db: Session = Depends(get_db),
+                   user: User = Depends(get_current_user)):
+    t = db.get(Template, template_id)
+    if not t or t.org_id != user.org_id:
+        raise HTTPException(404, "Plantilla no encontrada")
+    t.name = body.name
+    t.description = body.description
     db.commit(); db.refresh(t)
     return t
 

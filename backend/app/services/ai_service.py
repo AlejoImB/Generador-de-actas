@@ -10,74 +10,166 @@ Principios clave:
 """
 from __future__ import annotations
 import json
+import logging
 import re
 from app.core.config import get_settings
+
+logger = logging.getLogger(__name__)
 
 settings = get_settings()
 
 
+def _clean_transcript(transcript: str) -> str:
+    """Elimina artefactos de timestamp de transcripciones automáticas (Meet, Zoom, Teams).
+
+    Formatos eliminados:
+      - "0:27"  /  "1:19"  /  "33:57"  (líneas de solo HH:MM o MM:SS)
+      - "0 minutos 27 segundos"  (línea de duración hablada generada por el servicio)
+    """
+    cleaned = []
+    for line in transcript.split('\n'):
+        s = line.strip()
+        if re.match(r'^\d{1,2}:\d{2}(:\d{2})?$', s):
+            continue
+        if re.match(r'^\d+\s+minutos?\s+\d+\s+segundos?$', s, re.I):
+            continue
+        cleaned.append(line)
+    # Colapsar más de dos líneas en blanco consecutivas
+    result = re.sub(r'\n{3,}', '\n\n', '\n'.join(cleaned))
+    return result.strip()
+
+
 def build_prompt(template_schema: dict, transcript: str) -> tuple[str, str]:
     """Construye el prompt dinámico a partir del schema de la plantilla."""
-    tpl_type = template_schema.get("_tpl_type", "jinja2")
+    transcript = _clean_transcript(transcript)
+
     lines: list[str] = []
     for sec in template_schema.get("sections", []):
-        lines.append(f'\n### Sección: "{sec["title"]}"')
+        lines.append(f'\n### Sección "{sec["title"]}" (clave: {sec["key"]})')
         for f in sec.get("fields", []):
-            req = "OBLIGATORIO" if f.get("required") else "opcional"
             ftype = f["type"]
             hint = f.get("hint", "")
-            # Para campos de tabla estructurada, el hint ya incluye el formato esperado
             lines.append(
-                f'  • {sec["key"]}.{f["key"]}  [{req}]  tipo={ftype}\n'
-                f'    Etiqueta: "{f.get("label", "")}"\n'
-                f'    Instrucción: {hint}'
+                f'  Campo: {f["key"]}\n'
+                f'  Etiqueta visible: "{f.get("label", "")}"\n'
+                f'  Tipo de dato: {ftype}\n'
+                f'  Instrucción: {hint if hint else "Extrae el valor correspondiente de la transcripción."}'
             )
     spec = "\n".join(lines)
 
     system = (
-        "Eres un experto redactor de actas de reunión empresariales. "
-        "Tu tarea es leer una transcripción y extraer información para completar una plantilla de acta. "
-        "REGLAS:\n"
-        "1. Extrae ÚNICAMENTE lo que aparece en la transcripción. NUNCA inventes datos.\n"
-        "2. Si no hay información para un campo, devuelve value=null y confidence=0.\n"
-        "3. Cada campo devuelve: 'value', 'confidence' (0-100) y 'source' (cita breve).\n"
-        "4. Campos tipo 'people': devuelve array de objetos JSON con los atributos solicitados.\n"
-        "5. Campos tipo 'list': devuelve array de strings o array de objetos según las instrucciones.\n"
-        "6. Campos tipo 'date': usa el formato exacto del texto.\n"
-        "7. Responde SOLO con JSON válido, sin texto adicional."
+        "Eres un redactor experto en actas de reunión empresariales en español formal.\n"
+        "Tu tarea es analizar una transcripción de reunión y extraer información precisa "
+        "para completar los campos de una plantilla estructurada.\n\n"
+        "REGLAS ESTRICTAS — DEBES SEGUIRLAS SIN EXCEPCIÓN:\n"
+        "1. NUNCA copies texto crudo de la transcripción. Siempre interpreta, sintetiza y redacta.\n"
+        "2. Extrae solo información que esté claramente expresada en la transcripción.\n"
+        "   Si un dato no aparece con claridad, devuelve value=null y confidence=0.\n"
+        "3. 'confidence' es tu certeza real (0=ninguna, 100=absoluta). Sé conservador.\n"
+        "4. 'source' es una cita corta (máx 100 chars) del fragmento que respalda el valor.\n"
+        "5. Tipo 'people': array de objetos {\"nombre\": \"...\", \"cargo\": \"...\", \"entidad\": \"...\"}.\n"
+        "   Incluye solo personas claramente nombradas como participantes de la reunión.\n"
+        "6. Tipo 'list': array de strings. Cada ítem es un elemento independiente y conciso.\n"
+        "   Para agenda o temas: extrae los puntos tratados, NO oraciones del diálogo.\n"
+        "   Para compromisos/actividades: cada ítem debe tener estructura clara.\n"
+        "7. Tipo 'date': fecha en formato legible (ej. '15 de junio de 2025').\n"
+        "   Tipo 'time': hora en formato HH:MM (ej. '09:30').\n"
+        "8. Tipo 'text': REDACTA un resumen ejecutivo conciso en español formal.\n"
+        "   NO copies oraciones literales. Sintetiza y profesionaliza el lenguaje.\n"
+        "9. Para campos de 'objetivo': redacta 1-2 oraciones que describan el propósito\n"
+        "   de la reunión en lenguaje formal, basándote en lo discutido.\n"
+        "10. Responde EXCLUSIVAMENTE con el JSON solicitado. Sin explicaciones ni markdown."
     )
 
-    user = f"""Analiza la transcripción y completa TODOS los campos de la plantilla.
+    user = f"""Analiza la transcripción y completa la plantilla de acta.
 
-CAMPOS A COMPLETAR:
+=== DEFINICIÓN DE CAMPOS ===
 {spec}
 
-FORMATO DE RESPUESTA (JSON exacto):
+=== FORMATO DE RESPUESTA (JSON estricto) ===
 {{
   "<clave_seccion>": {{
-    "<clave_campo>": {{"value": <valor extraído o null>, "confidence": <0-100>, "source": "<cita>"}}
+    "<clave_campo>": {{
+      "value": <valor sintetizado o null>,
+      "confidence": <0-100>,
+      "source": "<fragmento breve que lo respalda>"
+    }}
   }}
 }}
 
-TRANSCRIPCIÓN:
-\"\"\"
+=== TRANSCRIPCIÓN ===
 {transcript}
-\"\"\"
-"""
+
+JSON:"""
     return system, user
+
+
+def _call_groq(system: str, user: str) -> dict:
+    from groq import Groq
+    client = Groq(api_key=settings.GROQ_API_KEY)
+    model = settings.GROQ_MODEL
+    logger.info("Llamando a Groq model=%s", model)
+    resp = client.chat.completions.create(
+        model=model,
+        max_tokens=8192,
+        temperature=0.1,
+        messages=[
+            {"role": "system", "content": system},
+            {"role": "user",   "content": user},
+        ],
+    )
+    text = resp.choices[0].message.content or ""
+    logger.info("Respuesta Groq recibida (%d chars)", len(text))
+    result = _safe_json(text)
+    if not result:
+        logger.warning("No se pudo parsear JSON de Groq: %s", text[:300])
+    return result
+
+
+def _call_ollama(system: str, user: str) -> dict:
+    import urllib.request
+    import json as _json
+    model = settings.OLLAMA_MODEL
+    base  = settings.OLLAMA_BASE_URL.rstrip("/")
+    url   = f"{base}/api/chat"
+    logger.info("Llamando a Ollama model=%s en %s", model, base)
+    payload = _json.dumps({
+        "model": model,
+        "stream": False,
+        "options": {"temperature": 0.1},
+        "messages": [
+            {"role": "system",  "content": system},
+            {"role": "user",    "content": user},
+        ],
+    }).encode()
+    req = urllib.request.Request(url, data=payload,
+                                 headers={"Content-Type": "application/json"})
+    with urllib.request.urlopen(req, timeout=180) as resp:
+        data = _json.loads(resp.read())
+    text = data.get("message", {}).get("content", "")
+    logger.info("Respuesta Ollama recibida (%d chars)", len(text))
+    result = _safe_json(text)
+    if not result:
+        logger.warning("No se pudo parsear JSON de Ollama: %s", text[:300])
+    return result
 
 
 def _call_anthropic(system: str, user: str) -> dict:
     import anthropic
     client = anthropic.Anthropic(api_key=settings.ANTHROPIC_API_KEY)
+    logger.info("Llamando a Anthropic model=%s", settings.AI_MODEL)
     msg = client.messages.create(
         model=settings.AI_MODEL,
-        max_tokens=4096,
+        max_tokens=8192,
         system=system,
         messages=[{"role": "user", "content": user}],
     )
     text = "".join(b.text for b in msg.content if getattr(b, "type", "") == "text")
-    return _safe_json(text)
+    logger.info("Respuesta Anthropic recibida (%d chars)", len(text))
+    result = _safe_json(text)
+    if not result:
+        logger.warning("No se pudo parsear JSON de la respuesta: %s", text[:300])
+    return result
 
 
 def _safe_json(text: str) -> dict:
@@ -97,9 +189,8 @@ def _safe_json(text: str) -> dict:
 
 
 def _mock_extract(template_schema: dict, transcript: str) -> dict:
-    """Extractor mock semántico: usa etiqueta, hint y tipo del campo para
-    encontrar información relevante en la transcripción."""
-    t = transcript
+    """Extractor mock semántico que opera sobre la transcripción ya limpia."""
+    t = _clean_transcript(transcript)
     out: dict = {}
 
     for sec in template_schema.get("sections", []):
@@ -140,10 +231,14 @@ def _mock_extract(template_schema: dict, transcript: str) -> dict:
 
             # ── Temas / agenda ───────────────────────────────────────────
             elif tbl_type == "topics" or any(k in ctx for k in ("tema", "agenda", "punto", "abordado")):
-                # Buscar oraciones que parezcan temas
-                sentences = [s.strip() for s in re.split(r"[.;]", t) if 10 < len(s.strip()) < 200]
-                if sentences:
-                    value, conf, src = sentences[:5], 65, "Temas extraídos de la transcripción."
+                # Filtrar candidatos: ni muy cortos ni texto crudo de diálogo
+                candidates = [
+                    s.strip() for s in re.split(r"[.;]", t)
+                    if 15 < len(s.strip()) < 120
+                    and not re.match(r'^\d', s.strip())
+                ]
+                if candidates:
+                    value, conf, src = candidates[:5], 55, "Temas extraídos de la transcripción."
 
             # ── Entregables ──────────────────────────────────────────────
             elif tbl_type == "deliverables" or any(k in ctx for k in ("entregable", "documento", "material")):
@@ -198,29 +293,30 @@ def _mock_extract(template_schema: dict, transcript: str) -> dict:
 
             # ── Objetivo / alcance ───────────────────────────────────────
             elif any(k in ctx for k in ("objetivo", "proposit", "finalidad", "meta", "alcance")):
-                sentences = [s.strip() for s in re.split(r"[.!?]", t) if len(s.strip()) > 20]
+                # Solo oraciones que contengan palabras clave de propósito (limitar a 200 chars)
+                sentences = [s.strip() for s in re.split(r"[.!?]", t)
+                             if 20 < len(s.strip()) < 300 and not re.match(r'^\d', s.strip())]
                 obj_sent = None
                 for sent in sentences:
                     sl = sent.lower()
                     if any(k in sl for k in ("objetivo", "finalidad", "prop", "revisar",
                                              "evaluar", "informar", "verificar", "socializar")):
-                        obj_sent = sent
+                        obj_sent = sent[:250]
                         break
                 if not obj_sent:
                     for sent in sentences:
                         if re.search(r"\bpara\s+\w", sent, re.I):
-                            obj_sent = sent
+                            obj_sent = sent[:250]
                             break
                 if obj_sent:
-                    value, conf, src = obj_sent, 72, obj_sent[:150]
-                elif sentences:
-                    value, conf, src = sentences[0], 40, sentences[0][:150]
+                    value, conf, src = obj_sent, 65, obj_sent[:120]
 
             # ── Observaciones / desarrollo ───────────────────────────────
             elif any(k in ctx for k in ("observaci", "desarrollo", "resumen", "detalle")):
-                long_sents = [s.strip() for s in re.split(r"[.!?]", t) if len(s.strip()) > 30]
+                long_sents = [s.strip() for s in re.split(r"[.!?]", t)
+                              if 30 < len(s.strip()) < 250 and not re.match(r'^\d', s.strip())]
                 if long_sents:
-                    value, conf, src = " ".join(long_sents[:3]), 55, long_sents[0][:150]
+                    value, conf, src = " ".join(long_sents[:2]), 50, long_sents[0][:120]
 
             # ── Genérico ─────────────────────────────────────────────────
             else:
@@ -261,13 +357,25 @@ def validate_and_score(template_schema: dict, raw: dict) -> tuple[dict, list, in
 
 
 def generate_acta(template_schema: dict, transcript: str) -> tuple[dict, list, int]:
-    """Orquesta: prompt dinámico → LLM (o mock) → validación → scoring."""
-    if settings.AI_PROVIDER == "anthropic" and settings.ANTHROPIC_API_KEY:
-        system, user = build_prompt(template_schema, transcript)
-        try:
+    """Orquesta: prompt dinámico → LLM (anthropic|groq|ollama|mock) → validación → scoring."""
+    provider = (settings.AI_PROVIDER or "mock").lower()
+    system, user = build_prompt(template_schema, transcript)
+    raw: dict = {}
+    try:
+        if provider == "anthropic":
+            if not settings.ANTHROPIC_API_KEY:
+                raise ValueError("ANTHROPIC_API_KEY no configurada")
             raw = _call_anthropic(system, user)
-        except Exception:
+        elif provider == "groq":
+            if not settings.GROQ_API_KEY:
+                raise ValueError("GROQ_API_KEY no configurada")
+            raw = _call_groq(system, user)
+        elif provider == "ollama":
+            raw = _call_ollama(system, user)
+        else:
+            logger.info("AI_PROVIDER=%s — usando extractor mock", provider)
             raw = _mock_extract(template_schema, transcript)
-    else:
+    except Exception as e:
+        logger.error("Fallo proveedor '%s': %s — usando mock como fallback", provider, e)
         raw = _mock_extract(template_schema, transcript)
     return validate_and_score(template_schema, raw)

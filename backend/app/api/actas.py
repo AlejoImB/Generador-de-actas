@@ -1,7 +1,8 @@
-import io
+import io, copy
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi.responses import StreamingResponse
 from sqlalchemy.orm import Session
+from sqlalchemy.orm.attributes import flag_modified
 from app.db.database import get_db
 from app.models.models import Acta, Transcript, Template, AuditLog, User
 from app.schemas.schemas import GenerateIn, ActaOut, FieldEditIn
@@ -60,15 +61,17 @@ def edit_field(aid: str, body: FieldEditIn, db: Session = Depends(get_db),
     a = db.get(Acta, aid)
     if not a or a.org_id != user.org_id:
         raise HTTPException(404, "Acta no encontrada")
-    data = dict(a.data)
+    data = copy.deepcopy(a.data)   # deep copy para evitar mutación silenciosa del JSON
     sec = data.get(body.section_key)
     if not sec or body.field_key not in sec["fields"]:
         raise HTTPException(422, "Campo inexistente en el acta")
     sec["fields"][body.field_key].update(
         {"value": body.value, "confidence": 100, "source": "Validado por usuario"})
     a.data = data
+    flag_modified(a, "data")       # fuerza a SQLAlchemy a detectar el cambio en JSON
     a.missing_fields = [m for m in a.missing_fields
                         if not (m["section"] == body.section_key and m["field"] == body.field_key)]
+    flag_modified(a, "missing_fields")
     db.commit(); db.refresh(a)
     _log(db, a.id, user.name, "campo editado", f'{body.section_key}.{body.field_key}')
     db.commit()
@@ -80,13 +83,20 @@ def approve(aid: str, db: Session = Depends(get_db), user: User = Depends(get_cu
     a = db.get(Acta, aid)
     if not a or a.org_id != user.org_id:
         raise HTTPException(404, "Acta no encontrada")
-    if a.missing_fields:
-        raise HTTPException(409, "No se puede aprobar: hay campos obligatorios faltantes")
     a.status = "approved"; a.reviewer_id = user.id
     db.commit(); db.refresh(a)
     _log(db, a.id, user.name, "aprobada")
     db.commit()
     return a
+
+
+@router.delete("/{aid}", status_code=204)
+def delete_acta(aid: str, db: Session = Depends(get_db), user: User = Depends(get_current_user)):
+    a = db.get(Acta, aid)
+    if not a or a.org_id != user.org_id:
+        raise HTTPException(404, "Acta no encontrada")
+    db.delete(a)
+    db.commit()
 
 
 @router.get("/{aid}/audit")
@@ -103,8 +113,6 @@ def download(aid: str, db: Session = Depends(get_db), user: User = Depends(get_c
     a = db.get(Acta, aid)
     if not a or a.org_id != user.org_id:
         raise HTTPException(404, "Acta no encontrada")
-    if a.status != "approved":
-        raise HTTPException(400, "El acta debe estar aprobada para ser descargada")
         
     tpl = db.get(Template, a.template_id)
     if not tpl or not tpl.file_path:

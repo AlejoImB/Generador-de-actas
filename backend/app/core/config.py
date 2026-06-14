@@ -13,11 +13,21 @@ class Settings(BaseSettings):
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 8
     DATABASE_URL: str = "sqlite:///./acta_ia.db"
 
-    # Proveedor de IA. Si no hay API key, el sistema usa un extractor
-    # determinístico de demostración para que la app funcione end-to-end.
-    AI_PROVIDER: str = "anthropic"           # anthropic | openai | gemini | mock
+    # Proveedor de IA — elegir uno: anthropic | groq | ollama | mock
+    AI_PROVIDER: str = "anthropic"
+    AI_MODEL: str = "claude-sonnet-4-6"
+
+    # Anthropic (Claude)
     ANTHROPIC_API_KEY: str = ""
-    AI_MODEL: str = "claude-sonnet-4-5"
+
+    # Groq (nube, gratuito con límites generosos)
+    GROQ_API_KEY: str = ""
+    GROQ_MODEL: str = "llama-3.1-70b-versatile"   # o mixtral-8x7b-32768
+
+    # Ollama (local, sin costo)
+    OLLAMA_BASE_URL: str = "http://localhost:11434"
+    OLLAMA_MODEL: str = "llama3.1:8b"              # o mistral:7b, gemma2:9b
+
     CORS_ORIGINS: str = "*"
 
 
