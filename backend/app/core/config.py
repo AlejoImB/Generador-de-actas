@@ -7,7 +7,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 
-    APP_NAME: str = "ActaIA"
+    APP_NAME: str = "Detto"
     ENV: str = "dev"
     SECRET_KEY: str = "cambia-esto-en-produccion-por-un-secreto-largo"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 8
