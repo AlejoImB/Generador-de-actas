@@ -10,6 +10,13 @@ class LoginIn(BaseModel):
     password: str
 
 
+class RegisterIn(BaseModel):
+    name: str
+    email: EmailStr
+    password: str
+    org_name: str = ""
+
+
 class TokenOut(BaseModel):
     access_token: str
     token_type: str = "bearer"

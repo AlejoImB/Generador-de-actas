@@ -349,13 +349,6 @@ textarea:focus{outline:none;border-color:var(--p4);box-shadow:0 0 0 4px rgba(34,
 .modal-close{width:30px;height:30px;border-radius:7px;display:grid;place-items:center;color:var(--muted);font-size:18px;cursor:pointer;transition:.12s}
 .modal-close:hover{background:var(--danger-bg);color:var(--danger)}
 .modal-body{padding:20px 24px;max-height:420px;overflow-y:auto}
-.audit-item{display:flex;gap:14px;padding:10px 0;border-bottom:1px solid var(--line2)}
-.audit-item:last-child{border-bottom:none}
-.audit-dot{width:8px;height:8px;border-radius:50%;background:var(--p4);flex-shrink:0;margin-top:5px}
-.audit-body{flex:1}
-.audit-action{font-size:13px;font-weight:600;color:var(--ink)}
-.audit-meta{font-size:11.5px;color:var(--muted);margin-top:2px}
-.audit-detail{font-size:11.5px;color:var(--sub);margin-top:3px;font-family:var(--mono)}
 
 /* ── 6. HIGHLIGHT FUENTE ─────────────────────────────── */
 .src-highlight{background:#FEF9C3;border-radius:3px;padding:1px 2px}
@@ -390,20 +383,41 @@ textarea:focus{outline:none;border-color:var(--p4);box-shadow:0 0 0 4px rgba(34,
         <div class="brand-feats">
           <div class="brand-feat"><div class="brand-feat-icon">✦</div>Extracción estructurada automática</div>
           <div class="brand-feat"><div class="brand-feat-icon">▣</div>Plantillas personalizables sin código</div>
-          <div class="brand-feat"><div class="brand-feat-icon">◎</div>Auditoría y trazabilidad completa</div>
+          <div class="brand-feat"><div class="brand-feat-icon">◎</div>Trazabilidad completa al origen</div>
         </div>
       </div>
     </div>
     <div class="brand-footer">© 2026 Detto · Innovasoft Colombia</div>
   </div>
-  <div class="formwrap"><div class="fcard">
+
+  <!-- Formulario LOGIN -->
+  <div class="formwrap" id="formLogin"><div class="fcard">
     <div class="fcard-eyebrow">Bienvenido de vuelta</div>
     <h2>Inicia sesión</h2>
     <p class="sub">Accede al panel de tu organización.</p>
-    <div class="field"><label>Correo corporativo</label><input id="email" type="email" placeholder="tu@empresa.com" value="ana.torres@empresa.com"></div>
-    <div class="field"><label>Contraseña</label><input id="pass" type="password" placeholder="••••••••" value="Demo1234"></div>
+    <div class="field"><label>Correo corporativo</label><input id="email" type="email" placeholder="tu@empresa.com"></div>
+    <div class="field"><label>Contraseña</label><input id="pass" type="password" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()"></div>
     <button class="btn btn-primary" onclick="doLogin()">Entrar al panel →</button>
     <div class="err" id="loginErr"></div>
+    <p style="margin-top:20px;font-size:13px;color:var(--muted);text-align:center">
+      ¿Sin cuenta? <a href="#" onclick="showRegister()" style="color:var(--p4);font-weight:600">Crear cuenta gratis</a>
+    </p>
+  </div></div>
+
+  <!-- Formulario REGISTRO -->
+  <div class="formwrap hidden" id="formRegister"><div class="fcard">
+    <div class="fcard-eyebrow">Nuevo en Detto</div>
+    <h2>Crear cuenta</h2>
+    <p class="sub">Configura tu organización en segundos.</p>
+    <div class="field"><label>Nombre completo</label><input id="regName" type="text" placeholder="Nombre Apellido"></div>
+    <div class="field"><label>Correo corporativo</label><input id="regEmail" type="email" placeholder="tu@empresa.com"></div>
+    <div class="field"><label>Nombre de la organización</label><input id="regOrg" type="text" placeholder="Empresa S.A.S."></div>
+    <div class="field"><label>Contraseña</label><input id="regPass" type="password" placeholder="Mínimo 6 caracteres" onkeydown="if(event.key==='Enter')doRegister()"></div>
+    <button class="btn btn-primary" onclick="doRegister()">Crear cuenta →</button>
+    <div class="err" id="registerErr"></div>
+    <p style="margin-top:20px;font-size:13px;color:var(--muted);text-align:center">
+      ¿Ya tienes cuenta? <a href="#" onclick="showLogin()" style="color:var(--p4);font-weight:600">Iniciar sesión</a>
+    </p>
   </div></div>
 </section>
 
@@ -609,24 +623,21 @@ Ana Torres: Existe un riesgo de retraso si no llega la aprobacion legal a tiempo
   </div>
 </div>
 
-<div id="auditModal" class="hidden">
-  <div class="modal-overlay" onclick="if(event.target===this)closeAudit()">
-    <div class="modal-box">
-      <div class="modal-head">
-        <h3>Historial de cambios</h3>
-        <div class="modal-close" onclick="closeAudit()">✕</div>
-      </div>
-      <div class="modal-body" id="auditBody"><p style="color:var(--muted);font-size:13px">Cargando…</p></div>
-    </div>
-  </div>
-</div>
 
 <script>
-const API="http://localhost:8000";
+// URL del backend: auto-detecta entorno
+const _h=window.location.hostname;
+const API=(_h==="localhost"||_h==="127.0.0.1"||window.location.protocol==="file:")
+  ? "http://localhost:8000"
+  : (window.DETTO_API_URL || `${window.location.protocol}//${_h}`);
+
 let TOKEN=null, USER=null, TEMPLATES=[], state={transcript:null,template:null,acta:null};
 const $=id=>document.getElementById(id);
 const H=()=>({"Authorization":"Bearer "+TOKEN});
 const esc=s=>(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+
+function showRegister(){$("formLogin").classList.add("hidden");$("formRegister").classList.remove("hidden");$("loginErr").textContent="";}
+function showLogin(){$("formRegister").classList.add("hidden");$("formLogin").classList.remove("hidden");$("registerErr").textContent="";}
 
 async function doLogin(){
   $("loginErr").textContent="";
@@ -636,7 +647,23 @@ async function doLogin(){
     if(!r.ok){$("loginErr").textContent="Correo o contraseña incorrectos";return;}
     const d=await r.json(); TOKEN=d.access_token; USER=d.user;
     enterApp();
-  }catch(e){$("loginErr").textContent="No se pudo conectar con la API (¿uvicorn en :8000?)";}
+  }catch(e){$("loginErr").textContent="No se pudo conectar con el servidor";}
+}
+
+async function doRegister(){
+  $("registerErr").textContent="";
+  const name=$("regName").value.trim(), email=$("regEmail").value.trim();
+  const org=$("regOrg").value.trim(), pass=$("regPass").value;
+  if(!name||!email||!pass){$("registerErr").textContent="Completa todos los campos";return;}
+  if(pass.length<6){$("registerErr").textContent="La contraseña debe tener al menos 6 caracteres";return;}
+  try{
+    const r=await fetch(API+"/api/auth/register",{method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({name,email,password:pass,org_name:org||name})});
+    if(!r.ok){const e=await r.json();$("registerErr").textContent=e.detail||"Error al crear cuenta";return;}
+    const d=await r.json(); TOKEN=d.access_token; USER=d.user;
+    enterApp();
+  }catch(e){$("registerErr").textContent="No se pudo conectar con el servidor";}
 }
 async function enterApp(){
   $("login").classList.add("hidden"); $("app").classList.remove("hidden");
@@ -813,7 +840,8 @@ function renderActa(){
     i++; html+=`<div class="asec"><div class="sh">${i}. ${esc(sv.title)}</div><div class="asec-grid">`;
     for(const[fk,fv] of Object.entries(sv.fields)){
       const v=fv.value;
-      const isEmpty=v==null||v===""||v===undefined||(Array.isArray(v)&&v.length===0);
+      const isStrayTimestamp=(fv.type==="date"||fv.type==="time")&&typeof v==="string"&&/^\d{1,2}:\d{2}(:\d{2})?$/.test(v.trim());
+      const isEmpty=v==null||v===""||v===undefined||(Array.isArray(v)&&v.length===0)||isStrayTimestamp;
       let dispVal="";
       if(!isEmpty){
         if(Array.isArray(v)) dispVal=v.map(x=>typeof x==="object"
@@ -1210,7 +1238,7 @@ function renderActasTable(){
       const cc=confClass(a.avg_confidence);
       const continuarBtn=isDraft?`<button onclick="resumeActa('${a.id}')" style="${btnBase} #b8d4f0;background:var(--p1);color:var(--p5);margin-right:6px">↩ Continuar</button>`:'';
       const descargarBtn=`<button onclick="descargarActaWord('${a.id}')" style="${btnBase} var(--line);background:#fff;color:var(--sub);margin-right:6px">⬇ Word</button>`;
-      const historialBtn=`<button onclick="showAudit('${a.id}')" title="Ver historial" style="${btnBase} var(--line);background:#fff;color:var(--sub);margin-right:6px">◷</button>`;
+      const historialBtn=``;
       const eliminarBtn=`<button onclick="deleteActa('${a.id}')" style="${btnBase} #f5c4c4;background:var(--danger-bg);color:var(--danger)">✕</button>`;
       return `<tr>
         <td><b>${esc(tpl?.name||"Acta")}</b><div style="font-size:11.5px;color:var(--muted);margin-top:2px">${new Date(a.created_at).toLocaleDateString('es-CO',{day:'2-digit',month:'short',year:'numeric'})}</div></td>
@@ -1241,25 +1269,6 @@ function renderActasTable(){
 
 function goPage(p){_pg=p;renderActasTable();}
 
-/* ══ 4. AUDITORÍA ═══════════════════════════════════════ */
-async function showAudit(id){
-  $("auditModal").classList.remove("hidden");
-  $("auditBody").innerHTML='<p style="color:var(--muted);font-size:13px">Cargando historial…</p>';
-  try{
-    const logs=await(await fetch(API+"/api/actas/"+id+"/audit",{headers:H()})).json();
-    if(!logs.length){$("auditBody").innerHTML='<p style="color:var(--muted);font-size:13px">Sin cambios registrados.</p>';return;}
-    $("auditBody").innerHTML=logs.reverse().map(l=>`
-      <div class="audit-item">
-        <div class="audit-dot"></div>
-        <div class="audit-body">
-          <div class="audit-action">${esc(l.action)}</div>
-          <div class="audit-meta">por <b>${esc(l.actor)}</b> · ${new Date(l.created_at).toLocaleString('es-CO',{dateStyle:'short',timeStyle:'short'})}</div>
-          ${l.detail?`<div class="audit-detail">${esc(l.detail)}</div>`:''}
-        </div>
-      </div>`).join('');
-  }catch(e){$("auditBody").innerHTML='<p style="color:var(--danger);font-size:13px">No se pudo cargar el historial.</p>';}
-}
-function closeAudit(){$("auditModal").classList.add("hidden");}
 
 /* ══ 5. RESALTADO DE FUENTE ═════════════════════════════ */
 function highlightSource(src){
