@@ -390,6 +390,21 @@ textarea:focus{outline:none;border-color:var(--p4);box-shadow:0 0 0 4px rgba(34,
     <div class="brand-footer">© 2026 Detto · Innovasoft Colombia</div>
   </div>
 
+  <!-- Panel SSO (Zitadel) — solo visible si el backend reporta mode=zitadel -->
+  <div class="formwrap hidden" id="formSSO"><div class="fcard">
+    <div class="fcard-eyebrow">Acceso corporativo</div>
+    <h2>Iniciar sesión</h2>
+    <p class="sub">Tu organización usa un sistema centralizado de identidad.</p>
+    <button class="btn btn-primary" id="ssoBtn" onclick="doSSOLogin()" style="display:flex;align-items:center;justify-content:center;gap:10px">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+      Continuar con SSO
+    </button>
+    <div class="err" id="ssoErr"></div>
+    <p style="margin-top:20px;font-size:12px;color:var(--muted);text-align:center">
+      Serás redirigido a tu proveedor de identidad corporativo.
+    </p>
+  </div></div>
+
   <!-- Formulario LOGIN -->
   <div class="formwrap" id="formLogin"><div class="fcard">
     <div class="fcard-eyebrow">Bienvenido de vuelta</div>
@@ -631,6 +646,33 @@ let TOKEN=null, USER=null, TEMPLATES=[], state={transcript:null,template:null,ac
 const $=id=>document.getElementById(id);
 const H=()=>({"Authorization":"Bearer "+TOKEN});
 const esc=s=>(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+
+// ── Inicialización: detectar modo auth y callback SSO ────────────────────────
+(async()=>{
+  // 1. ¿Viene de callback Zitadel? (?token=...&user=...)
+  const params=new URLSearchParams(window.location.search);
+  if(params.has("token")){
+    TOKEN=params.get("token");
+    try{ USER=JSON.parse(params.get("user")||"{}"); }catch(e){ USER={}; }
+    // Limpiar URL sin recargar
+    history.replaceState({},"",window.location.pathname);
+    if(TOKEN && USER.id){ enterApp(); return; }
+  }
+  // 2. Consultar modo auth al backend
+  try{
+    const cfg=await(await fetch(API+"/api/auth/config")).json();
+    if(cfg.mode==="zitadel"){
+      $("formLogin").classList.add("hidden");
+      $("formRegister").classList.add("hidden");
+      $("formSSO").classList.remove("hidden");
+    }
+  }catch(e){ /* sin conexión: mostrar login local */ }
+})();
+
+function doSSOLogin(){
+  const redirect=window.location.origin+window.location.pathname;
+  window.location.href=`${API}/api/auth/zitadel/login?redirect=${encodeURIComponent(redirect)}`;
+}
 
 function showRegister(){$("formLogin").classList.add("hidden");$("formRegister").classList.remove("hidden");$("loginErr").textContent="";}
 function showLogin(){$("formRegister").classList.add("hidden");$("formLogin").classList.remove("hidden");$("registerErr").textContent="";}

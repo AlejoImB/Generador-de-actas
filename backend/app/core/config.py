@@ -30,6 +30,13 @@ class Settings(BaseSettings):
 
     CORS_ORIGINS: str = "*"
 
+    # ── Zitadel (SSO corporativo) ─────────────────────────
+    # Si ZITADEL_DOMAIN está vacío la app usa auth local
+    ZITADEL_DOMAIN: str = ""          # https://auth.tuempresa.com
+    ZITADEL_CLIENT_ID: str = ""       # del app detto-frontend en Zitadel
+    ZITADEL_CLIENT_SECRET: str = ""   # del app detto-backend en Zitadel
+    ZITADEL_PROJECT_ID: str = ""      # ID del proyecto Detto en Zitadel
+
 
 @lru_cache
 def get_settings() -> Settings:
