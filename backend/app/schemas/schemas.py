@@ -1,5 +1,5 @@
 """Schemas Pydantic (contratos de la API)."""
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, EmailStr, field_validator
 from typing import Any
 from datetime import datetime
 
@@ -15,6 +15,20 @@ class RegisterIn(BaseModel):
     email: EmailStr
     password: str
     org_name: str = ""
+
+    @field_validator("password")
+    @classmethod
+    def password_strength(cls, v: str) -> str:
+        if len(v) < 6:
+            raise ValueError("La contraseña debe tener al menos 6 caracteres")
+        return v
+
+    @field_validator("name")
+    @classmethod
+    def name_not_empty(cls, v: str) -> str:
+        if not v.strip():
+            raise ValueError("El nombre no puede estar vacío")
+        return v.strip()
 
 
 class TokenOut(BaseModel):

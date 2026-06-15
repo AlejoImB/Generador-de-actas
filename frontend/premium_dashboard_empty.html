@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ActaIA - Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .dashed-border-anim {
+      background-image: url("data:image/svg+xml,%3csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3e%3crect width='100%25' height='100%25' fill='none' rx='16' ry='16' stroke='%23CBD5E1' stroke-width='3' stroke-dasharray='8%2c 12' stroke-dashoffset='0' stroke-linecap='square'/%3e%3c/svg%3e");
+      border-radius: 16px;
+      transition: all 0.3s ease;
+    }
+    .dashed-border-anim:hover {
+      background-image: url("data:image/svg+xml,%3csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3e%3crect width='100%25' height='100%25' fill='none' rx='16' ry='16' stroke='%236366F1' stroke-width='3' stroke-dasharray='8%2c 12' stroke-dashoffset='0' stroke-linecap='square'/%3e%3c/svg%3e");
+      background-color: #f8fafc;
+    }
+  </style>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: { brand: { 50: '#eef2ff', 100: '#e0e7ff', 500: '#6366f1', 600: '#4f46e5', 700: '#4338ca', 900: '#312e81' } }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-[#FAFAFA] text-slate-800 min-h-screen flex flex-col">
+
+  <!-- Navbar -->
+  <header class="bg-white border-b border-slate-200 px-6 py-4 flex justify-between items-center shadow-sm">
+    <div class="flex items-center gap-3">
+      <div class="w-8 h-8 bg-brand-600 rounded-lg flex items-center justify-center text-white font-bold shadow-md">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+      </div>
+      <h1 class="text-xl font-bold text-slate-900 tracking-tight">ActaIA</h1>
+    </div>
+    
+    <div class="flex items-center gap-4">
+      <div class="text-sm text-slate-500 font-medium hidden sm:block">Ana Torres <span class="text-slate-300 mx-2">|</span> Innovasoft Colombia</div>
+      <div class="w-8 h-8 rounded-full bg-brand-100 border border-brand-200 flex items-center justify-center text-brand-700 font-semibold text-sm">
+        AT
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="flex-1 flex flex-col max-w-5xl w-full mx-auto px-6 py-12">
+    
+    <div class="mb-8">
+      <h2 class="text-3xl font-bold text-slate-900 tracking-tight">Mis Actas Inteligentes</h2>
+      <p class="text-slate-500 mt-2 text-[15px]">Convierte tus reuniones en documentos estructurados con IA en segundos.</p>
+    </div>
+
+    <!-- Empty State Hero -->
+    <div class="flex-1 flex flex-col items-center justify-center bg-white rounded-2xl border border-slate-200 shadow-[0_2px_10px_rgba(0,0,0,0.02)] p-12 text-center">
+      
+      <!-- Ilustración (usando SVG sutiles) -->
+      <div class="relative w-48 h-48 mb-6 flex items-center justify-center">
+        <div class="absolute inset-0 bg-brand-50 rounded-full blur-2xl opacity-60"></div>
+        <svg class="w-24 h-24 text-brand-500 relative z-10" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 002-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
+        </svg>
+        <!-- Elemento flotante para dinamismo -->
+        <div class="absolute -top-2 -right-2 bg-white p-2 rounded-lg shadow-md border border-slate-100 animate-bounce" style="animation-duration: 3s;">
+          <svg class="w-6 h-6 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+        </div>
+      </div>
+
+      <h3 class="text-xl font-bold text-slate-800 mb-3">Aún no hay actas generadas</h3>
+      <p class="text-slate-500 max-w-md mb-8 text-[15px] leading-relaxed">
+        Sube la transcripción de tu última reunión (Zoom, Teams, Meet) y deja que la Inteligencia Artificial estructure las decisiones y compromisos por ti.
+      </p>
+
+      <!-- Zona Drag & Drop interactiva -->
+      <div class="dashed-border-anim p-10 w-full max-w-lg cursor-pointer group flex flex-col items-center justify-center">
+        <div class="bg-white p-3 rounded-full shadow-sm border border-slate-100 group-hover:scale-110 group-hover:shadow transition-transform mb-4">
+          <svg class="w-6 h-6 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
+        </div>
+        <p class="font-semibold text-slate-700 group-hover:text-brand-600 transition-colors">
+          Haz clic para subir o arrastra tu archivo
+        </p>
+        <p class="text-xs text-slate-400 mt-2">TXT, DOCX o PDF (Máx 20MB)</p>
+      </div>
+      
+      <div class="flex items-center gap-4 mt-8 w-full max-w-lg">
+        <hr class="flex-1 border-slate-200">
+        <span class="text-xs font-medium text-slate-400 uppercase tracking-widest">O</span>
+        <hr class="flex-1 border-slate-200">
+      </div>
+
+      <button class="mt-8 px-6 py-2.5 text-sm font-medium text-slate-700 bg-white border border-slate-300 rounded-lg shadow-sm hover:bg-slate-50 transition-colors flex items-center gap-2">
+        <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+        Pegar texto manualmente
+      </button>
+
+    </div>
+
+  </main>
+</body>
+</html>.

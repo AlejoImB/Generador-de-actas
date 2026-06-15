@@ -449,7 +449,7 @@ textarea:focus{outline:none;border-color:var(--p4);box-shadow:0 0 0 4px rgba(34,
   <div class="main">
     <header class="top">
       <div class="org">
-        <div class="avatar" style="border-radius:9px;width:30px;height:30px;font-size:11px">IS</div>
+        <div class="avatar" id="orgAvatar" style="border-radius:9px;width:30px;height:30px;font-size:11px">··</div>
         <span class="org-name" id="orgName">—</span>
         <span class="pill">Empresarial</span>
       </div>
@@ -563,12 +563,8 @@ textarea:focus{outline:none;border-color:var(--p4);box-shadow:0 0 0 4px rgba(34,
             <p>TXT · DOCX · PDF — o pega el texto abajo</p>
             <input id="file" type="file" accept=".txt,.docx,.pdf" class="hidden" onchange="uploadFile(this)">
           </div>
-          <textarea id="ta" placeholder="…o pega aquí la transcripción de la reunión">Ana Torres: Buenos dias, damos inicio al comite directivo del segundo trimestre el 13 de junio de 2026. Estan presentes Carlos Mejia, Marcela Rios y Diego Pardo.
-Carlos Mejia: Propongo que aprobemos el presupuesto de marketing de 120 millones para el lanzamiento.
-Marcela Rios: De acuerdo, decidimos aprobar con seguimiento mensual.
-Diego Pardo: Me comprometo a entregar el plan de medios el 27 de junio, soy el responsable.
-Ana Torres: Existe un riesgo de retraso si no llega la aprobacion legal a tiempo.</textarea>
-          <input id="trTitle" class="field" placeholder="Título de la reunión" value="Comité directivo Q2"
+          <textarea id="ta" placeholder="…o pega aquí la transcripción de la reunión"></textarea>
+          <input id="trTitle" class="field" placeholder="Título de la reunión" value=""
             style="width:100%;height:44px;border:1.5px solid var(--line);border-radius:8px;padding:0 14px;margin-top:12px;font-family:inherit">
           <div class="wnav"><span></span><button class="btn btn-primary btnw" onclick="saveTranscript()">Continuar →</button></div>
         </div>
@@ -668,16 +664,14 @@ async function doRegister(){
 async function enterApp(){
   $("login").classList.add("hidden"); $("app").classList.remove("hidden");
   $("userName").textContent=USER.name; $("hello").textContent="Hola, "+USER.name.split(" ")[0]+" 👋";
-  $("userAvatar").textContent=USER.name.split(" ").map(s=>s[0]).join("").slice(0,2);
+  $("userAvatar").textContent=USER.name.split(" ").map(s=>s[0]).join("").slice(0,2).toUpperCase();
   const me=await(await fetch(API+"/api/auth/me",{headers:H()})).json();
-  try {
-    const h=await(await fetch(API+"/api/health")).json();
-    $("aiBadge").innerHTML="";
-  } catch(e) {
-    console.warn("Health endpoint falló, continuando inicio de sesión...", e);
-    $("aiBadge").innerHTML="";
-  }
-  $("orgName").textContent="Innovasoft Colombia";
+  const orgName=me.org_name||USER.org_name||"Mi organización";
+  $("orgName").textContent=orgName;
+  USER.org_name=orgName;
+  // Avatar de organización: primeras 2 letras
+  const orgInitials=orgName.split(" ").map(w=>w[0]).join("").slice(0,2).toUpperCase();
+  if($("orgAvatar")) $("orgAvatar").textContent=orgInitials;
   TEMPLATES=await(await fetch(API+"/api/templates",{headers:H()})).json();
   renderTemplates(); loadDashboard();
 }
@@ -1139,7 +1133,7 @@ async function exportPDF(){
     html+="</div>";
   }
   html+=`<div style="margin-top:32px;padding-top:14px;border-top:1px solid #E8EEF6;font-size:11px;color:#AAB4BF;display:flex;justify-content:space-between">
-    <span>Detto · Innovasoft Colombia</span><span>Confianza de análisis: ${a.avg_confidence}%</span>
+    <span>Detto · ${esc(USER.org_name||"")}</span><span>Confianza de análisis: ${a.avg_confidence}%</span>
   </div></div>`;
   const el=$("print-area");
   el.innerHTML=html; el.classList.remove("hidden");
@@ -1288,10 +1282,16 @@ function openEditTpl(id){
   $("editTplId").value=id;
   $("editTplName").value=t.name;
   $("editTplDesc").value=t.description||"";
-  $("editTplModal").classList.remove("hidden");
+  const m=$("editTplModal");
+  m.classList.remove("hidden");
+  m.style.display="flex";
   setTimeout(()=>$("editTplName").focus(),50);
 }
-function closeEditTpl(){$("editTplModal").classList.add("hidden");}
+function closeEditTpl(){
+  const m=$("editTplModal");
+  m.classList.add("hidden");
+  m.style.display="none";
+}
 async function saveEditTpl(){
   const id=$("editTplId").value;
   const name=$("editTplName").value.trim();
@@ -1306,7 +1306,7 @@ async function saveEditTpl(){
 </script>
 
 <!-- Modal editar plantilla -->
-<div id="editTplModal" class="hidden" style="position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:9999;display:flex;align-items:center;justify-content:center"
+<div id="editTplModal" class="hidden" style="position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:9999;align-items:center;justify-content:center"
      onclick="if(event.target===this)closeEditTpl()">
   <div style="background:#fff;border-radius:14px;padding:28px 28px 24px;width:100%;max-width:420px;box-shadow:0 8px 40px rgba(0,0,0,.18)">
     <h3 style="font-size:16px;font-weight:700;margin-bottom:18px">Editar plantilla</h3>

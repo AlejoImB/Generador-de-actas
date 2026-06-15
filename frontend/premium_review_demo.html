@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ActaIA - Revisión Inteligente</title>
+  
+  <!-- Tailwind CSS vía CDN (ideal para setup sin build) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Tipografía moderna (Inter) -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <style>
+    body { 
+      font-family: 'Inter', sans-serif; 
+      /* Previene el scroll del body completo, dejándolo a las columnas */
+      overflow: hidden; 
+    }
+    /* Efecto de transición suave al resaltar el texto origen */
+    .source-highlight {
+      background-color: transparent;
+      transition: all 0.3s ease;
+      border-radius: 4px;
+    }
+    .source-highlight.active {
+      background-color: #fef08a; /* yellow-200 */
+      color: #713f12; /* yellow-900 */
+      padding: 2px 4px;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+    }
+  </style>
+  
+  <script>
+    // Configuración de tema personalizado de Tailwind
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: { 50: '#eef2ff', 100: '#e0e7ff', 500: '#6366f1', 600: '#4f46e5', 700: '#4338ca', 900: '#312e81' }
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-slate-50 text-slate-800 h-screen flex flex-col">
+
+  <!-- Navbar / Header Premium -->
+  <header class="bg-white border-b border-slate-200 px-6 py-4 flex justify-between items-center shrink-0 shadow-sm z-20">
+    <div class="flex items-center gap-3">
+      <div class="w-8 h-8 bg-brand-600 rounded-lg flex items-center justify-center text-white font-bold shadow-md">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+      </div>
+      <h1 class="text-xl font-bold text-slate-900 tracking-tight">ActaIA</h1>
+    </div>
+    
+    <!-- Stepper de Progreso -->
+    <div class="hidden md:flex items-center text-sm font-medium text-slate-400">
+       <span class="flex items-center gap-2"><div class="w-5 h-5 rounded-full bg-slate-200 text-xs flex items-center justify-center text-slate-600">1</div> Cargar</span>
+       <span class="mx-3 text-slate-300">/</span>
+       <span class="flex items-center gap-2"><div class="w-5 h-5 rounded-full bg-slate-200 text-xs flex items-center justify-center text-slate-600">2</div> Plantilla</span>
+       <span class="mx-3 text-slate-300">/</span>
+       <span class="text-brand-600 flex items-center gap-2"><div class="w-5 h-5 rounded-full bg-brand-600 text-xs flex items-center justify-center text-white">3</div> Revisar y Aprobar</span>
+    </div>
+    
+    <div class="flex gap-3">
+      <button class="px-4 py-2 text-sm font-medium text-slate-600 bg-white border border-slate-300 rounded-lg shadow-sm hover:bg-slate-50 transition-colors">Guardar Borrador</button>
+      <button class="px-4 py-2 text-sm font-medium text-white bg-brand-600 rounded-lg shadow-sm hover:bg-brand-700 transition-colors flex items-center gap-2">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+        Aprobar Acta
+      </button>
+    </div>
+  </header>
+
+  <!-- Layout de Pantalla Dividida (Split Screen) -->
+  <main class="flex-1 flex overflow-hidden">
+    
+    <!-- Columna Izquierda: Documento Original -->
+    <div class="w-1/2 border-r border-slate-200 bg-white flex flex-col relative z-0 shadow-[4px_0_24px_rgba(0,0,0,0.02)]">
+      <div class="px-8 py-4 border-b border-slate-100 bg-slate-50/80 flex justify-between items-center backdrop-blur-sm">
+        <div>
+          <h2 class="font-semibold text-slate-800 flex items-center gap-2">
+            <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7"></path></svg>
+            Transcripción Original
+          </h2>
+        </div>
+        <span class="text-xs font-medium px-2.5 py-1 bg-white border border-slate-200 text-slate-500 rounded-md shadow-sm">1,245 palabras</span>
+      </div>
+      
+      <div class="p-8 overflow-y-auto flex-1 text-[15px] leading-relaxed text-slate-600 font-serif">
+        <p class="mb-5">
+          Buenos días a todos. Damos inicio a la <span id="src-reunion" class="source-highlight">reunión del Comité de Gerencia</span> de hoy, 
+          <span id="src-fecha" class="source-highlight">5 de mayo de 2026</span>. Están presentes Ana Torres, Carlos Ruiz y Elena Gómez.
+        </p>
+        <p class="mb-5">
+          El objetivo principal es revisar los resultados del trimestre Q1 y aprobar el nuevo presupuesto de marketing. 
+          Carlos, ¿tienes los números?
+        </p>
+        <p class="mb-5">
+          Sí, los ingresos aumentaron un 15%, pero tenemos un <span id="src-riesgo" class="source-highlight">bloqueo con los proveedores logísticos</span> que está afectando los márgenes.
+        </p>
+        <p class="mb-5">
+          Entendido. Como <span id="src-decision" class="source-highlight">decisión, se aprueba el presupuesto de marketing con un aumento del 10%</span> condicionado a resolver la logística.
+        </p>
+        <p class="mb-5">
+          Perfecto. Yo me <span id="src-compromiso" class="source-highlight">comprometo a negociar los contratos de logística para el 15 de mayo</span>.
+        </p>
+      </div>
+    </div>
+
+    <!-- Columna Derecha: Formulario Generado por IA -->
+    <div class="w-1/2 bg-[#f8fafc] flex flex-col overflow-hidden relative">
+      <div class="px-8 py-4 border-b border-slate-200 bg-white flex justify-between items-center shadow-sm z-10">
+        <div>
+          <h2 class="font-semibold text-slate-800">Datos Extraídos (Acta)</h2>
+          <p class="text-xs text-slate-500 mt-0.5">Plantilla seleccionada: <span class="font-medium text-slate-700">Comité de Gerencia</span></p>
+        </div>
+        <div class="flex items-center gap-2 bg-emerald-50 px-3 py-1.5 rounded-full border border-emerald-100">
+          <span class="flex h-2 w-2 relative">
+            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+            <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+          </span>
+          <span class="text-xs font-semibold text-emerald-700">Confianza Media: 85%</span>
+        </div>
+      </div>
+      
+      <div class="p-8 overflow-y-auto flex-1 space-y-6">
+        
+        <!-- Tarjeta de Sección 1 -->
+        <div class="bg-white rounded-xl shadow-[0_1px_3px_rgba(0,0,0,0.05),0_1px_2px_rgba(0,0,0,0.03)] border border-slate-200 overflow-hidden transition-all hover:shadow-md">
+          <div class="px-5 py-3 border-b border-slate-100 bg-slate-50/50 flex items-center justify-between">
+            <h3 class="text-xs font-bold text-slate-500 uppercase tracking-wider">1. Identificación</h3>
+          </div>
+          <div class="p-5 space-y-5">
+            
+            <!-- Campo IA (Confianza Alta) -->
+            <!-- El evento onmouseenter llama a la función que resalta el texto original -->
+            <div class="group relative cursor-pointer p-2 -m-2 rounded-lg hover:bg-slate-50 transition-colors" 
+                 onmouseenter="highlightSource('src-reunion', true)" 
+                 onmouseleave="highlightSource('src-reunion', false)">
+              <div class="absolute left-0 top-2 bottom-2 w-1 bg-brand-500 rounded-r opacity-0 group-hover:opacity-100 transition-opacity"></div>
+              <label class="block text-xs font-medium text-slate-400 mb-1 pl-2">Reunión / Tema <span class="text-red-400">*</span></label>
+              <div class="flex items-center justify-between pl-2">
+                <div class="text-slate-900 font-medium">Reunión del Comité de Gerencia</div>
+                <span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium bg-emerald-100 text-emerald-800 border border-emerald-200">
+                  92% IA
+                </span>
+              </div>
+            </div>
+
+            <!-- Campo IA (Confianza Media) -->
+            <div class="group relative cursor-pointer p-2 -m-2 rounded-lg hover:bg-slate-50 transition-colors" 
+                 onmouseenter="highlightSource('src-compromiso', true)" 
+                 onmouseleave="highlightSource('src-compromiso', false)">
+              <div class="absolute left-0 top-2 bottom-2 w-1 bg-brand-500 rounded-r opacity-0 group-hover:opacity-100 transition-opacity"></div>
+              <label class="block text-xs font-medium text-slate-400 mb-1 pl-2">Compromisos Adquiridos</label>
+              <div class="flex items-center justify-between pl-2">
+                <div class="text-slate-900 text-sm">Negociar contratos de logística (15 de mayo)</div>
+                <span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium bg-yellow-100 text-yellow-800 border border-yellow-200">
+                  65% IA
+                </span>
+              </div>
+            </div>
+            
+            <!-- Empty State / Missing Field (Campo Faltante requerido por la app) -->
+            <div id="container-participantes" class="mt-4 rounded-lg border-2 border-dashed border-red-200 bg-red-50/50 p-4 transition-colors hover:border-red-300">
+              <div class="flex items-center justify-between mb-2">
+                <label class="block text-xs font-bold text-red-600 uppercase tracking-wide flex items-center gap-1.5">
+                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                  Faltante: Participantes
+                </label>
+                <span class="text-[10px] text-red-400 font-medium">Bloquea aprobación</span>
+              </div>
+              <input type="text" id="input-participantes" onblur="updateField('identificacion', 'participantes', this.value)" placeholder="Escribe los nombres y presiona Enter o haz clic fuera..." class="w-full text-sm p-2.5 border border-red-200 rounded-md outline-none focus:border-red-400 focus:ring-1 focus:ring-red-400 bg-white shadow-sm placeholder:text-slate-400 transition-colors">
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <script>
+    // Función sencilla de Vanilla JS para el UX de trazabilidad IA <-> Documento
+    function highlightSource(sourceId, isHovering) {
+      const sourceElement = document.getElementById(sourceId);
+      if (sourceElement) {
+        if (isHovering) {
+          sourceElement.classList.add('active');
+        } else {
+          sourceElement.classList.remove('active');
+        }
+      }
+    }
+
+    // Función para manejar el guardado Inline (conecta con PATCH /api/actas/{aid}/field)
+    async function updateField(sectionKey, fieldKey, value) {
+      if (!value.trim()) return;
+
+      const inputEl = document.getElementById(`input-${fieldKey}`);
+      const container = document.getElementById(`container-${fieldKey}`);
+      const originalClass = inputEl.className;
+      
+      // Feedback Visual: Estado de "Guardando..."
+      inputEl.disabled = true;
+      inputEl.classList.add('opacity-50', 'cursor-wait');
+
+      try {
+        // --- Aquí iría tu llamado Fetch real a FastAPI ---
+        // const response = await fetch(`/api/actas/${CURRENT_ACTA_ID}/field`, {
+        //   method: 'PATCH',
+        //   headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${TOKEN}` },
+        //   body: JSON.stringify({ section_key: sectionKey, field_key: fieldKey, value: value })
+        // });
+        // if (!response.ok) throw new Error('Error al guardar');
+
+        // Simulamos el delay de red de 600ms para la demo
+        await new Promise(r => setTimeout(r, 600));
+
+        // Feedback Visual: Transición a estado "Validado" con color verde y tag de confianza 100%
+        container.className = "mt-4 rounded-lg border border-emerald-200 bg-emerald-50/30 p-4 transition-all duration-500 shadow-sm";
+        container.innerHTML = `
+          <label class="block text-xs font-medium text-slate-400 mb-1 pl-2">Participantes</label>
+          <div class="flex items-center justify-between pl-2">
+            <div class="text-slate-900 text-sm font-medium">${value}</div>
+            <span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium bg-emerald-100 text-emerald-800 border border-emerald-200">
+              100% Validado
+            </span>
+          </div>
+        `;
+      } catch (error) {
+        alert("Hubo un error al guardar el campo. Intenta de nuevo.");
+        inputEl.disabled = false;
+        inputEl.className = originalClass;
+      }
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,195 @@
+INFO:     Will watch for changes in these directories: ['C:\\Users\\user\\Desktop\\acta-ia\\backend']
+C:\Users\user\Desktop\acta-ia\backend\app\schemas\schemas.py:34: UserWarning: Field name "schema" in "TemplateIn" shadows an attribute in parent "BaseModel"
+  class TemplateIn(BaseModel):
+C:\Users\user\Desktop\acta-ia\backend\app\schemas\schemas.py:45: UserWarning: Field name "schema" in "TemplateOut" shadows an attribute in parent "BaseModel"
+  class TemplateOut(BaseModel):
+INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
+INFO:     Started reloader process [13240] using WatchFiles
+C:\Users\user\Desktop\acta-ia\backend\app\schemas\schemas.py:34: UserWarning: Field name "schema" in "TemplateIn" shadows an attribute in parent "BaseModel"
+  class TemplateIn(BaseModel):
+C:\Users\user\Desktop\acta-ia\backend\app\schemas\schemas.py:45: UserWarning: Field name "schema" in "TemplateOut" shadows an attribute in parent "BaseModel"
+  class TemplateOut(BaseModel):
+INFO:     Started server process [10144]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     127.0.0.1:59696 - "GET /health HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:57344 - "POST /api/auth/login HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57344 - "OPTIONS /api/auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57344 - "GET /api/auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57344 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57344 - "OPTIONS /api/templates HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57344 - "GET /api/templates HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57344 - "OPTIONS /api/actas HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57344 - "GET /api/actas HTTP/1.1" 200 OK
+WARNING:  WatchFiles detected changes in 'app\services\ai_service.py'. Reloading...
+ INFO:     127.0.0.1:62224 - "POST /api/auth/login HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62224 - "OPTIONS /api/auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62224 - "GET /api/auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62224 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62224 - "OPTIONS /api/templates HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62224 - "GET /api/templates HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62224 - "OPTIONS /api/actas HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62224 - "GET /api/actas HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52494 - "OPTIONS /api/actas/0fde8fb4b0ef453399add83ada4afc02/audit HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52494 - "GET /api/actas/0fde8fb4b0ef453399add83ada4afc02/audit HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57221 - "OPTIONS /api/templates HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57221 - "GET /api/templates HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57221 - "OPTIONS /api/actas HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57221 - "GET /api/actas HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57221 - "OPTIONS /api/templates HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57221 - "GET /api/templates HTTP/1.1" 200 OK
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [10144]
+C:\Users\user\Desktop\acta-ia\backend\app\schemas\schemas.py:34: UserWarning: Field name "schema" in "TemplateIn" shadows an attribute in parent "BaseModel"
+  class TemplateIn(BaseModel):
+C:\Users\user\Desktop\acta-ia\backend\app\schemas\schemas.py:45: UserWarning: Field name "schema" in "TemplateOut" shadows an attribute in parent "BaseModel"
+  class TemplateOut(BaseModel):
+INFO:     Started server process [10828]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app\services\ai_service.py'. Reloading...
+ INFO:     Shutting down
+INFO:     Waiting for connections to close. (CTRL+C to force quit)
+INFO:     127.0.0.1:56613 - "POST /api/auth/login HTTP/1.1" 200 OK
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [10828]
+C:\Users\user\Desktop\acta-ia\backend\app\schemas\schemas.py:34: UserWarning: Field name "schema" in "TemplateIn" shadows an attribute in parent "BaseModel"
+  class TemplateIn(BaseModel):
+C:\Users\user\Desktop\acta-ia\backend\app\schemas\schemas.py:45: UserWarning: Field name "schema" in "TemplateOut" shadows an attribute in parent "BaseModel"
+  class TemplateOut(BaseModel):
+INFO:     Started server process [3592]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     127.0.0.1:53355 - "OPTIONS /api/auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50388 - "OPTIONS /api/templates HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53355 - "OPTIONS /api/actas HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50388 - "GET /api/auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53355 - "GET /api/templates HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53355 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53355 - "OPTIONS /api/templates HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50388 - "GET /api/actas HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53355 - "GET /api/templates HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53355 - "OPTIONS /api/actas HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53355 - "GET /api/actas HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58127 - "POST /api/auth/login HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58127 - "OPTIONS /api/auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58127 - "GET /api/auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58127 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58127 - "OPTIONS /api/templates HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58127 - "GET /api/templates HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58127 - "OPTIONS /api/actas HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58127 - "GET /api/actas HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58127 - "POST /api/auth/login HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58127 - "OPTIONS /api/auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58127 - "GET /api/auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58127 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58127 - "OPTIONS /api/templates HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58127 - "GET /api/templates HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58127 - "OPTIONS /api/actas HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58127 - "GET /api/actas HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50600 - "POST /api/auth/login HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50600 - "OPTIONS /api/auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50600 - "GET /api/auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50600 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50600 - "OPTIONS /api/templates HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50600 - "GET /api/templates HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50600 - "OPTIONS /api/actas HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50600 - "GET /api/actas HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50600 - "OPTIONS /api/templates HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50600 - "GET /api/templates HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53787 - "OPTIONS /api/actas HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53787 - "GET /api/actas HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53787 - "OPTIONS /api/transcripts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53787 - "POST /api/transcripts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53787 - "OPTIONS /api/actas/generate HTTP/1.1" 200 OK
+Fallo proveedor 'anthropic': Connection error. — usando mock como fallback
+INFO:     127.0.0.1:53787 - "POST /api/actas/generate HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52580 - "OPTIONS /api/actas/11b7aab2daa4406fa2829400337975c1/approve HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52580 - "POST /api/actas/11b7aab2daa4406fa2829400337975c1/approve HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52580 - "OPTIONS /api/actas HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52580 - "GET /api/actas HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64343 - "POST /api/auth/login HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64343 - "OPTIONS /api/auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64343 - "GET /api/auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64343 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64343 - "OPTIONS /api/templates HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64343 - "GET /api/templates HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64343 - "OPTIONS /api/actas HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64343 - "GET /api/actas HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64343 - "OPTIONS /api/actas/11b7aab2daa4406fa2829400337975c1 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64343 - "DELETE /api/actas/11b7aab2daa4406fa2829400337975c1 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:64343 - "OPTIONS /api/actas HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64343 - "GET /api/actas HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64343 - "OPTIONS /api/actas/0fde8fb4b0ef453399add83ada4afc02 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64343 - "DELETE /api/actas/0fde8fb4b0ef453399add83ada4afc02 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:64343 - "OPTIONS /api/actas HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64343 - "GET /api/actas HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64343 - "POST /api/auth/login HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64343 - "OPTIONS /api/auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64343 - "GET /api/auth/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64343 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64343 - "OPTIONS /api/templates HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64343 - "GET /api/templates HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64343 - "OPTIONS /api/actas HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64343 - "GET /api/actas HTTP/1.1" 200 OK
+WARNING:  WatchFiles detected changes in 'app\schemas\schemas.py'. Reloading...
+ INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [3592]
+C:\Users\user\Desktop\acta-ia\backend\app\schemas\schemas.py:41: UserWarning: Field name "schema" in "TemplateIn" shadows an attribute in parent "BaseModel"
+  class TemplateIn(BaseModel):
+C:\Users\user\Desktop\acta-ia\backend\app\schemas\schemas.py:52: UserWarning: Field name "schema" in "TemplateOut" shadows an attribute in parent "BaseModel"
+  class TemplateOut(BaseModel):
+INFO:     Started server process [10464]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app\api\auth.py'. Reloading...
+ INFO:     127.0.0.1:57451 - "POST /api/auth/login HTTP/1.1" 422 Unprocessable Content
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [10464]
+WARNING:  WatchFiles detected changes in 'app\main.py'. Reloading...
+ C:\Users\user\Desktop\acta-ia\backend\app\schemas\schemas.py:41: UserWarning: Field name "schema" in "TemplateIn" shadows an attribute in parent "BaseModel"
+  class TemplateIn(BaseModel):
+C:\Users\user\Desktop\acta-ia\backend\app\schemas\schemas.py:52: UserWarning: Field name "schema" in "TemplateOut" shadows an attribute in parent "BaseModel"
+  class TemplateOut(BaseModel):
+INFO:     Started server process [17192]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [17192]
+C:\Users\user\Desktop\acta-ia\backend\app\schemas\schemas.py:41: UserWarning: Field name "schema" in "TemplateIn" shadows an attribute in parent "BaseModel"
+  class TemplateIn(BaseModel):
+C:\Users\user\Desktop\acta-ia\backend\app\schemas\schemas.py:52: UserWarning: Field name "schema" in "TemplateOut" shadows an attribute in parent "BaseModel"
+  class TemplateOut(BaseModel):
+INFO:     Started server process [15880]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     127.0.0.1:50922 - "POST /api/auth/login HTTP/1.1" 422 Unprocessable Content
+INFO:     127.0.0.1:52381 - "POST /api/auth/login HTTP/1.1" 422 Unprocessable Content
+INFO:     127.0.0.1:62794 - "POST /api/auth/login HTTP/1.1" 422 Unprocessable Content
+INFO:     127.0.0.1:51823 - "POST /api/auth/login HTTP/1.1" 422 Unprocessable Content
+INFO:     127.0.0.1:54081 - "POST /api/auth/login HTTP/1.1" 422 Unprocessable Content
+INFO:     127.0.0.1:56246 - "POST /api/auth/login HTTP/1.1" 422 Unprocessable Content
+INFO:     127.0.0.1:50922 - "POST /api/auth/login HTTP/1.1" 422 Unprocessable Content
+INFO:     127.0.0.1:61036 - "POST /api/auth/login HTTP/1.1" 422 Unprocessable Content
+INFO:     127.0.0.1:61036 - "POST /api/auth/login HTTP/1.1" 422 Unprocessable Content
+WARNING:  WatchFiles detected changes in 'app\core\config.py'. Reloading...
+ INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [15880]
+C:\Users\user\Desktop\acta-ia\backend\app\schemas\schemas.py:41: UserWarning: Field name "schema" in "TemplateIn" shadows an attribute in parent "BaseModel"
+  class TemplateIn(BaseModel):
+C:\Users\user\Desktop\acta-ia\backend\app\schemas\schemas.py:52: UserWarning: Field name "schema" in "TemplateOut" shadows an attribute in parent "BaseModel"
+  class TemplateOut(BaseModel):
+INFO:     Started server process [18416]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
