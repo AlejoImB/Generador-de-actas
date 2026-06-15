@@ -195,25 +195,23 @@ textarea:focus{outline:none;border-color:var(--p4);box-shadow:0 0 0 4px rgba(34,
 .panel::-webkit-scrollbar-thumb{background:var(--line);border-radius:4px}
 
 /* Acta fields */
-.asec{margin-bottom:18px}
+.asec{margin-bottom:16px}
 .asec .sh{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;
-  margin-bottom:8px;display:flex;gap:8px;align-items:center;color:var(--p5)}
+  margin-bottom:6px;display:flex;gap:8px;align-items:center;color:var(--p5)}
 .asec .sh::after{content:'';flex:1;height:1px;background:var(--line)}
 /* Grid 2 columnas dentro de cada sección */
-.asec-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px}
-.afield{background:var(--sur);border:1px solid var(--line);border-radius:8px;padding:9px 11px;transition:.12s;cursor:pointer;min-height:64px}
-.fval{display:-webkit-box;-webkit-line-clamp:3;line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
-/* afield-wide eliminado — todos los campos tienen el mismo ancho */
-.afield:hover{border-color:var(--p2);background:#F7FAFF}
-.afield.field-empty{border-color:#FDE68A;background:#FFFDF0}
-.afield .ft{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px}
-.flabel{font-size:10px;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);font-weight:700}
-.conf{font-size:10px;font-weight:600;padding:1px 7px;border-radius:100px}
+.asec-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.afield{background:var(--sur);padding:8px 12px;transition:.12s;cursor:pointer;min-height:0}
+.afield:hover{background:#F2F6FF}
+.afield.field-empty{background:#FFFEF5}
+.afield .ft{display:flex;justify-content:space-between;align-items:center;margin-bottom:3px}
+.flabel{font-size:9.5px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:700}
+.conf{font-size:10px;font-weight:600;padding:1px 6px;border-radius:100px}
 .conf.hi{background:var(--ok-bg);color:var(--ok)}.conf.mid{background:var(--warn-bg);color:var(--warn)}.conf.low{background:var(--danger-bg);color:var(--danger)}
-.src{font-family:var(--mono);font-size:10px;color:var(--p4);margin-top:5px;opacity:.7;cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.src{font-family:var(--mono);font-size:10px;color:var(--p4);margin-top:4px;opacity:.7;cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .src:hover{opacity:1;color:var(--p5)}
-.fval{font-size:13px;color:var(--ink);font-weight:500;line-height:1.45}
-.no-data{color:#C8D0DA;font-size:11.5px;font-style:italic}
+.fval{font-size:13px;color:var(--ink);font-weight:500;line-height:1.4;display:-webkit-box;-webkit-line-clamp:3;line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.no-data{color:#BCC8D8;font-size:11.5px;font-style:italic}
 
 /* Approve bar */
 .approve{background:var(--sur);border:1px solid var(--line);border-radius:var(--r-lg);
@@ -290,6 +288,25 @@ textarea:focus{outline:none;border-color:var(--p4);box-shadow:0 0 0 4px rgba(34,
 .empty-state-icon{width:80px;height:80px;border-radius:24px;background:linear-gradient(135deg,var(--p1),#E0EEFB);display:grid;place-items:center;margin:0 auto 24px;box-shadow:0 4px 20px rgba(34,85,164,.1)}
 .empty-state h3{font-size:18px;font-weight:700;color:var(--ink);margin-bottom:8px}
 .empty-state p{font-size:14px;color:var(--muted);max-width:340px;line-height:1.6;margin-bottom:24px}
+
+/* ── WIZARD 4 PASOS — extras ─────────────────────────── */
+.tpl-item{display:flex;align-items:flex-start;gap:12px;padding:12px 14px;
+  border:1.5px solid var(--line);border-radius:10px;cursor:pointer;transition:.18s;
+  background:var(--sur);position:relative;}
+.tpl-item::before{content:'';position:absolute;left:0;top:4px;bottom:4px;width:3px;
+  background:var(--p5);border-radius:0 3px 3px 0;opacity:0;transition:.18s}
+.tpl-item:hover{border-color:var(--p3);background:#F7FAFF;transform:translateX(2px)}
+.tpl-item:hover::before{opacity:.4}
+.tpl-item.sel{border-color:var(--p5);background:var(--p1);box-shadow:2px 0 0 var(--p5) inset}
+.tpl-item.sel::before{opacity:1}
+.tpl-item .ti{font-size:26px;flex-shrink:0;line-height:1;margin-top:1px}
+.tpl-item h5{font-size:13.5px;font-weight:700;margin-bottom:3px;color:var(--ink)}
+.tpl-item p{font-size:11.5px;color:var(--muted);line-height:1.4;margin-bottom:5px}
+.tpl-item-count{font-size:10.5px;font-weight:600;color:var(--p5);background:var(--p1);
+  border:1px solid var(--p2);border-radius:100px;padding:1px 8px;display:inline-block}
+.doc-sheet{background:#fff;border:1px solid var(--line);border-radius:var(--r-lg);
+  padding:28px 32px;max-height:62vh;overflow-y:auto;
+  box-shadow:0 1px 3px rgba(13,24,41,.04),0 4px 16px rgba(13,24,41,.06)}
 
 /* ── ANIMACIÓN APROBACIÓN ────────────────────────────── */
 @keyframes popIn{0%{transform:scale(0);opacity:0}60%{transform:scale(1.15)}100%{transform:scale(1);opacity:1}}
@@ -558,19 +575,22 @@ textarea:focus{outline:none;border-color:var(--p4);box-shadow:0 0 0 4px rgba(34,
       <div id="page-wizard" class="hidden">
         <div class="phead">
           <div class="phead-left">
-            <div class="eyebrow" style="color:var(--p5)">Nueva acta · 3 pasos</div>
+            <div class="eyebrow" style="color:var(--p5)">Nueva acta · 4 pasos</div>
             <h2>Generar acta de reunión</h2>
           </div>
           <button onclick="nav('dash')" class="btn btn-line btnw" style="font-size:13px;height:38px;color:var(--muted)">✕ Cancelar</button>
         </div>
         <div class="steps">
-          <div class="step cur" id="s1"><div class="c">1</div><div class="l">Cargar transcripción<small>Archivo o pegar texto</small></div></div>
+          <div class="step cur" id="s1"><div class="c">1</div><div class="l">Transcripción<small>Archivo o texto</small></div></div>
           <div class="bar" id="b1"></div>
-          <div class="step" id="s2"><div class="c">2</div><div class="l">Seleccionar plantilla<small>Define la estructura</small></div></div>
+          <div class="step" id="s2"><div class="c">2</div><div class="l">Plantilla<small>Elige y previsualiza</small></div></div>
           <div class="bar" id="b2"></div>
-          <div class="step" id="s3"><div class="c">3</div><div class="l">Generar y revisar<small>Valida y aprueba</small></div></div>
+          <div class="step" id="s3"><div class="c">3</div><div class="l">Validar campos<small>Revisa y edita</small></div></div>
+          <div class="bar" id="b3"></div>
+          <div class="step" id="s4"><div class="c">4</div><div class="l">Vista previa<small>Aprueba y descarga</small></div></div>
         </div>
 
+        <!-- Paso 1: Cargar transcripción -->
         <div class="wstep active" id="w1">
           <div class="dz" onclick="document.getElementById('file').click()">
             <div class="dz-icon">⬆</div>
@@ -579,25 +599,51 @@ textarea:focus{outline:none;border-color:var(--p4);box-shadow:0 0 0 4px rgba(34,
             <input id="file" type="file" accept=".txt,.docx,.pdf" class="hidden" onchange="uploadFile(this)">
           </div>
           <textarea id="ta" placeholder="…o pega aquí la transcripción de la reunión"></textarea>
-          <input id="trTitle" class="field" placeholder="Título de la reunión" value=""
-            style="width:100%;height:44px;border:1.5px solid var(--line);border-radius:8px;padding:0 14px;margin-top:12px;font-family:inherit">
+          <input id="trTitle" placeholder="Título de la reunión" value=""
+            style="width:100%;height:44px;border:1.5px solid var(--line);border-radius:8px;padding:0 14px;margin-top:12px;font-family:inherit;font-size:14px;color:var(--ink);background:var(--sur)">
           <div class="wnav"><span></span><button class="btn btn-primary btnw" onclick="saveTranscript()">Continuar →</button></div>
         </div>
 
+        <!-- Paso 2: Seleccionar plantilla + vista previa -->
         <div class="wstep" id="w2">
-          <div class="tpls" id="tpls"></div>
-          <div style="margin-top:16px;font-size:13px;color:var(--muted)">💡 Las plantillas se configuran en Administración sin desarrollo.</div>
-          <div class="wnav"><button class="btn btn-line btnw" onclick="step(1)">← Atrás</button>
-            <button class="btn btn-primary btnw" onclick="generate()" id="genBtn" style="padding:0 28px;height:46px;font-size:14.5px;box-shadow:0 6px 20px rgba(34,85,164,.35)">✦ Generar acta</button></div>
+          <div style="display:grid;grid-template-columns:260px 1fr;gap:14px;align-items:start">
+            <!-- Lista de plantillas -->
+            <div>
+              <div style="font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:8px;padding:0 2px">Plantillas disponibles</div>
+              <div id="tplListW2" style="display:flex;flex-direction:column;gap:6px"></div>
+            </div>
+            <!-- Panel de vista previa -->
+            <div style="background:var(--sur);border:1px solid var(--line);border-radius:var(--r-lg);box-shadow:var(--sh-sm);overflow:hidden">
+              <div style="background:var(--line2);border-bottom:1px solid var(--line);padding:10px 18px;display:flex;align-items:center;gap:7px">
+                <svg width="13" height="13" fill="none" stroke="var(--p5)" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14,2 14,8 20,8"/></svg>
+                <span style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--p5)">Vista previa de plantilla</span>
+              </div>
+              <div id="tplPreviewPane" style="padding:18px 20px;max-height:420px;overflow-y:auto">
+                <p style="color:var(--muted);font-size:13.5px">Selecciona una plantilla para ver sus campos.</p>
+              </div>
+            </div>
+          </div>
+          <!-- grid oculto para mantener compatibilidad -->
+          <div class="tpls hidden" id="tpls"></div>
+          <div class="wnav" style="margin-top:16px">
+            <button class="btn btn-line btnw" onclick="step(1)">← Atrás</button>
+            <button class="btn btn-primary btnw" onclick="generate()" id="genBtn" style="padding:0 28px;height:46px;font-size:15px;letter-spacing:-.01em;box-shadow:0 6px 20px rgba(34,85,164,.35)">✦ Generar acta</button>
+          </div>
         </div>
 
+        <!-- Paso 3: Validar y editar campos (sin transcripción) -->
         <div class="wstep" id="w3">
-          <div id="fillPanel" class="fill-panel hidden"></div>
-          <div class="review">
-            <div class="card"><div class="chead"><h3>Transcripción</h3></div><div class="panel mono" id="trPanel"></div></div>
-            <div class="card"><div class="chead"><h3>Acta estructurada</h3><span style="font-size:12px;color:var(--muted)" id="tplName"></span></div>
-              <div class="panel" id="actaPanel"></div></div>
+          <div id="w3Hdr"></div>
+          <div id="w3Fields"></div>
+          <div class="wnav">
+            <button class="btn btn-line btnw" onclick="step(2)">← Atrás</button>
+            <button class="btn btn-primary btnw" onclick="goToPreview()" style="padding:0 28px">Ver vista previa →</button>
           </div>
+        </div>
+
+        <!-- Paso 4: Vista previa del documento + aprobar -->
+        <div class="wstep" id="w4">
+          <div class="doc-sheet" id="docSheet"></div>
           <div class="approve">
             <div>
               <div style="font-size:12px;color:var(--muted);margin-bottom:2px">Confianza de análisis</div>
@@ -609,7 +655,7 @@ textarea:focus{outline:none;border-color:var(--p4);box-shadow:0 0 0 4px rgba(34,
               <button class="btn btn-primary btnw" id="approveBtn" onclick="approve()" style="height:42px;padding:0 28px">Aprobar acta ✓</button>
             </div>
           </div>
-          <div class="wnav"><button class="btn btn-line btnw" onclick="step(2)">← Volver</button><span></span></div>
+          <div class="wnav"><button class="btn btn-line btnw" onclick="step(3)">← Volver</button><span></span></div>
         </div>
       </div>
 
@@ -787,14 +833,11 @@ async function loadDashboard(){
 }
 
 function nuevaActa(){
-  // Siempre empieza desde cero en el paso 1
   state={transcript:null,template:null,acta:null};
   $("ta").value=""; $("trTitle").value="";
-  $("fillPanel").classList.add("hidden");
-  $("actaPanel").innerHTML=""; $("trPanel").textContent="";
-  $("approveBtn").style.display="inline-flex";
-  $("btn-descargar-word").disabled=true;
-  $("btn-descargar-word").classList.replace("btn-primary","btn-line");
+  if($("w3Hdr")) $("w3Hdr").innerHTML="";
+  if($("w3Fields")) $("w3Fields").innerHTML="";
+  if($("docSheet")) $("docSheet").innerHTML="";
   renderTemplates();
   nav('wizard');
   step(1);
@@ -807,8 +850,8 @@ async function resumeActa(id){
     const tpl=TEMPLATES.find(t=>t.id===a.template_id);
     state.acta=a; state.transcript=tr; state.template=tpl||null;
     nav('wizard');
-    step(3);
-    renderActa();
+    renderTemplates();
+    renderW3(); step(3);
     toast("↩ Acta cargada — puedes continuar desde donde lo dejaste");
   }catch(e){
     toast("No se pudo cargar el acta");
@@ -823,17 +866,83 @@ async function deleteActa(id){
 }
 
 function renderTemplates(){
-  $("tpls").innerHTML=TEMPLATES.map((t,i)=>`<div class="tpl ${i===0?'sel':''}" onclick="selTpl('${t.id}',this)">
+  // Lista compacta en W2
+  if($("tplListW2")){
+    $("tplListW2").innerHTML=TEMPLATES.map((t,i)=>{
+      const fc=t.schema?.sections?.reduce((s,sec)=>s+(sec.fields?.length||0),0)||0;
+      return `<div class="tpl-item ${i===0?'sel':''}" onclick="selTplW2('${t.id}',this)">
+        <span class="ti">${t.icon}</span>
+        <div>
+          <h5>${esc(t.name)}</h5>
+          <p>${esc(t.description||"")}</p>
+          <span class="tpl-item-count">${fc} campo${fc!==1?'s':''}</span>
+        </div>
+      </div>`;
+    }).join("");
+  }
+  // Grid oculto de compatibilidad
+  if($("tpls")) $("tpls").innerHTML=TEMPLATES.map((t,i)=>`<div class="tpl ${i===0?'sel':''}" onclick="selTpl('${t.id}',this)">
     <div class="i">${t.icon}</div><h4>${t.name}</h4><p>${t.description}</p></div>`).join("");
   state.template=TEMPLATES[0];
+  if(TEMPLATES[0]) renderTplPreview(TEMPLATES[0]);
 }
 function selTpl(id,el){document.querySelectorAll(".tpl").forEach(t=>t.classList.remove("sel"));el.classList.add("sel");state.template=TEMPLATES.find(t=>t.id===id);}
+function selTplW2(id,el){
+  document.querySelectorAll(".tpl-item").forEach(t=>t.classList.remove("sel"));
+  el.classList.add("sel");
+  state.template=TEMPLATES.find(t=>t.id===id);
+  renderTplPreview(state.template);
+}
+function renderTplPreview(tpl){
+  const pane=$("tplPreviewPane"); if(!pane||!tpl) return;
+  const sections=tpl.schema?.sections||[];
+  const totalFields=sections.reduce((s,sec)=>s+(sec.fields?.length||0),0);
+  const totalSecs=sections.length;
+
+  pane.innerHTML=`
+    <!-- Cabecera de plantilla -->
+    <div style="display:flex;align-items:flex-start;gap:14px;padding-bottom:16px;margin-bottom:16px;border-bottom:1px solid var(--line)">
+      <div style="width:48px;height:48px;border-radius:12px;background:linear-gradient(135deg,var(--p1),#dbeafe);border:1px solid var(--p2);display:grid;place-items:center;font-size:26px;flex-shrink:0">
+        ${tpl.icon}
+      </div>
+      <div style="flex:1;min-width:0">
+        <div style="font-size:17px;font-weight:700;color:var(--ink);margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(tpl.name)}</div>
+        <div style="font-size:12.5px;color:var(--muted);margin-bottom:8px">${esc(tpl.description||"Sin descripción")}</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <span class="tag info">📋 ${totalFields} campos</span>
+          <span style="font-size:11px;color:var(--muted);display:flex;align-items:center;gap:4px">
+            <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>
+            ${totalSecs} sección${totalSecs!==1?'es':''}
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Estructura del documento -->
+    <div style="font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:10px">Estructura del documento</div>
+    ${sections.map((sec,si)=>{
+      const fields=sec.fields||[];
+      return `<div style="margin-bottom:12px">
+        <div style="display:flex;align-items:center;gap:7px;margin-bottom:6px">
+          <div style="width:16px;height:16px;border-radius:50%;background:var(--p5);color:#fff;display:grid;place-items:center;font-size:8.5px;font-weight:700;flex-shrink:0">${si+1}</div>
+          <span style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--p6)">${esc(sec.title)}</span>
+          <span style="font-size:10px;color:var(--muted);background:var(--line2);border-radius:100px;padding:1px 7px;margin-left:auto">${fields.length}</span>
+        </div>
+        <div style="padding-left:23px;display:flex;flex-wrap:wrap;gap:4px">
+          ${fields.map(f=>`<span style="background:#fff;border:1px solid var(--line);border-radius:5px;padding:2px 8px;font-size:11.5px;color:var(--sub)">${esc(f.label)}</span>`).join("")}
+        </div>
+      </div>`;
+    }).join("")}
+  `;
+}
 
 function step(n){
   document.querySelectorAll(".wstep").forEach(s=>s.classList.remove("active"));
   $("w"+n).classList.add("active");
-  for(let i=1;i<=3;i++){const s=$("s"+i);s.classList.remove("cur","done");if(i<n)s.classList.add("done");else if(i===n)s.classList.add("cur");}
-  $("b1").classList.toggle("done",n>1);$("b2").classList.toggle("done",n>2);
+  for(let i=1;i<=4;i++){const s=$("s"+i);s.classList.remove("cur","done");if(i<n)s.classList.add("done");else if(i===n)s.classList.add("cur");}
+  $("b1").classList.toggle("done",n>1);
+  $("b2").classList.toggle("done",n>2);
+  $("b3").classList.toggle("done",n>3);
 }
 async function uploadFile(inp){
   const f=inp.files[0]; if(!f)return;
@@ -859,18 +968,43 @@ async function generate(){
       body:JSON.stringify({transcript_id:state.transcript.id,template_id:state.template.id})});
     if(!r.ok){const e=await r.json();toast("Error: "+(e.detail||"No se pudo generar"));return;}
     state.acta=await r.json();
-    renderActa(); step(3);
+    renderW3(); step(3);
   }finally{
     btn.innerHTML="✦ Generar acta"; btn.disabled=false; btn.classList.remove("btn-generating");
   }
 }
 function confClass(c){return c>=85?"hi":c>=50?"mid":"low";}
 
-function renderActa(){
+function renderW3(){
   const a=state.acta;
-  $("trPanel").textContent=state.transcript?.content||"";
-  $("tplName").textContent="Plantilla: "+(state.template?.name||"");
-  $("avgConf").textContent=a.avg_confidence+"%";
+  if(!a) return;
+
+  // Calcular progreso
+  let total=0,filled=0,missing=0;
+  for(const sv of Object.values(a.data)) for(const fv of Object.values(sv.fields)){
+    total++;
+    const v=fv.value;
+    const isEmpty=v==null||v===""||v===undefined||(Array.isArray(v)&&v.length===0);
+    if(!isEmpty) filled++; else missing++;
+  }
+  const pct=total>0?Math.round(filled/total*100):100;
+  const barColor=pct===100?"var(--ok)":pct>=70?"var(--p5)":"var(--warn)";
+
+  if($("w3Hdr")) $("w3Hdr").innerHTML=`
+    <div style="display:flex;align-items:center;gap:16px;background:var(--sur);border:1px solid var(--line);border-radius:var(--r-lg);padding:12px 18px;margin-bottom:16px;box-shadow:var(--sh-xs)">
+      <div style="flex:1">
+        <div style="height:6px;background:var(--line);border-radius:4px;overflow:hidden;margin-bottom:6px">
+          <div style="height:100%;width:${pct}%;background:${barColor};border-radius:4px;transition:.7s ease"></div>
+        </div>
+        <div style="font-size:12px;color:var(--muted)">
+          <b style="color:${barColor}">${filled}/${total}</b> campos completos
+          ${missing?` · <span style="color:var(--warn)">⚠ ${missing} sin información</span>`:""}
+        </div>
+      </div>
+      <div style="font-size:22px;font-weight:700;color:${barColor};min-width:52px;text-align:right">${pct}%</div>
+    </div>`;
+
+  // Campos por sección
   let i=0,html="";
   for(const[sk,sv] of Object.entries(a.data)){
     i++; html+=`<div class="asec"><div class="sh">${i}. ${esc(sv.title)}</div><div class="asec-grid">`;
@@ -880,27 +1014,22 @@ function renderActa(){
       const isEmpty=v==null||v===""||v===undefined||(Array.isArray(v)&&v.length===0)||isStrayTimestamp;
       let dispVal="";
       if(!isEmpty){
-        if(Array.isArray(v)) dispVal=v.map(x=>typeof x==="object"
-          ?Object.values(x).filter(Boolean).join(" · "):String(x)).join("<br>");
+        if(Array.isArray(v)) dispVal=v.map(x=>typeof x==="object"?Object.values(x).filter(Boolean).join(" · "):String(x)).join("<br>");
         else dispVal=esc(String(v));
       }
-      const srcAttr=fv.source?` data-src="${esc(fv.source)}"`:"";
-      html+=`<div class="afield${isEmpty?" field-empty":""}" data-sk="${sk}" data-fk="${fk}"${srcAttr}>
+      html+=`<div class="afield${isEmpty?" field-empty":""}" data-sk="${sk}" data-fk="${fk}">
         <div class="ft">
           <span class="flabel">${esc(fv.label)}</span>
           ${!isEmpty?`<span class="conf ${confClass(fv.confidence)}">${fv.confidence}%</span>`:""}
         </div>
-        ${isEmpty
-          ?`<div class="no-data">Clic para añadir</div>`
-          :`<div class="fval">${dispVal}</div>
-           ${fv.source?`<div class="src" onclick="event.stopPropagation();highlightSource('${esc(fv.source)}')">↳ ${esc(fv.source)}</div>`:""}`}
+        ${isEmpty?`<div class="no-data">Clic para añadir</div>`:`<div class="fval">${dispVal}</div>`}
       </div>`;
     }
     html+="</div></div>";
   }
-  $("actaPanel").innerHTML=html;
+  if($("w3Fields")) $("w3Fields").innerHTML=html;
 
-  // Edición inline: clic en cualquier campo
+  // Edición inline
   document.querySelectorAll(".afield").forEach(el=>{
     el.addEventListener("click",()=>{
       const sk=el.dataset.sk, fk=el.dataset.fk;
@@ -908,13 +1037,79 @@ function renderActa(){
       if(fv) makeFieldEditable(el,sk,fk,fv);
     });
   });
+}
 
-  $("approveBtn").disabled=false;
-  $("approveBtn").style.opacity=1;
-  $("approveBtn").style.display="inline-flex";
-  $("btn-descargar-word").disabled=true;
-  $("btn-descargar-word").classList.replace("btn-primary","btn-line");
-  renderFillPanel();
+function renderActa(){ renderW3(); } // compatibilidad con resumeActa
+
+function goToPreview(){ renderPreview(); step(4); }
+
+function renderPreview(){
+  const a=state.acta;
+  if(!a){if($("docSheet"))$("docSheet").innerHTML="<p style='color:var(--muted);padding:24px'>No hay acta generada.</p>";return;}
+  const tplName=state.template?.name||"Acta";
+  const today=new Date().toLocaleDateString('es-CO',{year:'numeric',month:'long',day:'numeric'});
+  const orgName=USER?.org_name||"";
+  const cc=confClass(a.avg_confidence);
+  const confColor=cc==="hi"?"#0E9A6A":cc==="mid"?"#D97706":"#DC2626";
+
+  let html=`<div style="font-family:Inter,sans-serif;color:#0D1829;max-width:100%">
+    <!-- Encabezado del documento -->
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:16px;padding-bottom:18px;margin-bottom:22px;border-bottom:2.5px solid #2255A4">
+      <div style="flex:1">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+          <div style="width:28px;height:28px;border-radius:7px;background:linear-gradient(135deg,#2255A4,#3B78D6);display:grid;place-items:center;color:#fff;font-size:12px;font-weight:800;flex-shrink:0">A</div>
+          <span style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#2255A4">Detto · Acta de Reunión</span>
+        </div>
+        <div style="font-size:24px;font-weight:700;color:#0D1829;letter-spacing:-.02em;margin-bottom:4px">${esc(tplName)}</div>
+        ${orgName?`<div style="font-size:12.5px;color:#8896A8;margin-bottom:2px">${esc(orgName)}</div>`:""}
+        <div style="font-size:11.5px;color:#AAB4BF">${today}</div>
+      </div>
+      <div style="text-align:center;background:#F4F7FC;border:1px solid #E8EEF6;border-radius:10px;padding:10px 18px;flex-shrink:0">
+        <div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#8896A8;margin-bottom:4px">Confianza</div>
+        <div style="font-size:26px;font-weight:700;line-height:1;color:${confColor}">${a.avg_confidence}%</div>
+      </div>
+    </div>`;
+
+  let i=0;
+  for(const[,sv] of Object.entries(a.data)){
+    i++;
+    const fields=Object.values(sv.fields);
+    html+=`<div style="margin-bottom:20px">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+        <div style="width:18px;height:18px;border-radius:50%;background:#2255A4;color:#fff;display:grid;place-items:center;font-size:9px;font-weight:700;flex-shrink:0">${i}</div>
+        <div style="font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#4A5568">${esc(sv.title)}</div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1px;background:#E8EEF6;border:1px solid #E8EEF6;border-radius:8px;overflow:hidden">`;
+    for(const fv of fields){
+      const v=fv.value;
+      const isEmpty=v==null||v===""||v===undefined||(Array.isArray(v)&&v.length===0);
+      const isWide=fv.type==="people"||fv.type==="list"||(typeof v==="string"&&v.length>80);
+      let dispVal="";
+      if(!isEmpty){
+        if(fv.type==="people"&&Array.isArray(v))
+          dispVal=v.map(p=>[p.nombre,p.cargo,p.entidad].filter(Boolean).join(" · ")).join("<br>");
+        else if(Array.isArray(v))
+          dispVal=v.map(x=>typeof x==="object"?Object.values(x).filter(Boolean).join(" · "):esc(String(x))).join("<br>");
+        else
+          dispVal=esc(String(v));
+      }
+      html+=`<div style="background:#fff;padding:9px 13px;break-inside:avoid${isWide?';grid-column:1/-1':''}">
+        <div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#8896A8;margin-bottom:3px">${esc(fv.label)}</div>
+        <div style="font-size:13px;line-height:1.4;color:${isEmpty?"#C8D0DA":"#0D1829"}">${isEmpty?"—":dispVal}</div>
+      </div>`;
+    }
+    html+=`</div></div>`;
+  }
+
+  html+=`<div style="margin-top:24px;padding-top:10px;border-top:1px solid #E8EEF6;display:flex;justify-content:space-between;align-items:center">
+    <span style="font-size:10.5px;color:#AAB4BF">Generado por Detto${orgName?" · "+esc(orgName):""}</span>
+    <span style="font-size:10.5px;color:#AAB4BF">${today}</span>
+  </div></div>`;
+
+  if($("docSheet")) $("docSheet").innerHTML=html;
+  if($("avgConf")) $("avgConf").textContent=a.avg_confidence+"%";
+  if($("approveBtn")){$("approveBtn").disabled=false;$("approveBtn").style.display="inline-flex";}
+  if($("btn-descargar-word")){$("btn-descargar-word").disabled=true;$("btn-descargar-word").classList.replace("btn-primary","btn-line");}
 }
 
 function renderFillPanel(){
@@ -1067,7 +1262,7 @@ async function saveAllFields(){
     if(r.ok) state.acta=await r.json();
   }
 
-  renderActa();
+  renderW3();
   toast(`✓ ${updates.length} campo${updates.length>1?"s":""} guardado${updates.length>1?"s":""}`);
 }
 async function approve(){
@@ -1077,9 +1272,8 @@ async function approve(){
   btn.innerHTML="Aprobar acta ✓"; btn.disabled=false;
   if(r.ok){
     state.acta.status="approved";
-    $("btn-descargar-word").disabled=false;
-    $("btn-descargar-word").classList.replace("btn-line","btn-primary");
-    $("approveBtn").style.display="none";
+    if($("btn-descargar-word")){$("btn-descargar-word").disabled=false;$("btn-descargar-word").classList.replace("btn-line","btn-primary");}
+    if($("approveBtn")) $("approveBtn").style.display="none";
     launchConfetti();
     $("approveOverlay").classList.remove("hidden");
   } else toast("No se pudo aprobar el acta");

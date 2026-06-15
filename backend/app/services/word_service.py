@@ -365,12 +365,15 @@ def _render_structural(template_path: str, acta_data: dict) -> bytes:
     doc = Document(template_path)
     tables = doc.tables
 
-    # Aplanar todos los campos para la tabla de encabezado y párrafos de texto
+    # Solo valores escalares (text/date) en flat — listas y personas van solo a typed
+    # para evitar que _fill_text_paragraphs las vuelque como texto crudo
     flat: dict = {}
     for sec_val in acta_data.values():
         for fk, fv in sec_val.get("fields", {}).items():
-            if fk not in flat:  # primera ocurrencia gana para texto libre
-                flat[fk] = fv.get("value")
+            if fk not in flat:
+                ftype = fv.get("type", "text")
+                if ftype not in ("people", "list"):
+                    flat[fk] = fv.get("value")
 
     # Índice tipado: agrupa valores por categoría semántica en orden de sección
     typed: dict[str, list] = {"people": [], "commits": [], "topics": [], "deliverables": []}
@@ -449,23 +452,44 @@ def _render_structural(template_path: str, acta_data: dict) -> bytes:
 
 
 def _fill_list_table(tbl, value, col_keys: list[str]):
-    """Añade filas de datos a una tabla, después de la fila de headers."""
+    """Añade filas de datos a una tabla, después de la fila de headers.
+    Usa los encabezados reales de la tabla para mapear columnas (ignora 'firma')."""
     if not value:
         return
     items = value if isinstance(value, list) else [value]
-    # Usar la primera fila de datos (si existe) como plantilla de formato
+
+    # Headers reales de la primera fila (en minúsculas) para mapeo flexible
+    real_headers = [c.text.strip().lower() for c in tbl.rows[0].cells] if tbl.rows else []
+
     template_row = tbl.rows[1] if len(tbl.rows) > 1 else tbl.rows[0]
 
     for item in items:
         new_row = copy.deepcopy(template_row._tr)
         tbl._tbl.append(new_row)
-        # Acceder a la fila recién añadida
         row_obj = tbl.rows[-1]
+        # Limpiar todo el texto de la fila clonada
+        for cell in row_obj.cells:
+            _set_cell_text(cell, "")
+
         if isinstance(item, dict):
-            for ci, key in enumerate(col_keys):
-                if ci < len(row_obj.cells):
-                    cell_val = item.get(key, item.get(key.replace("_", " "), ""))
-                    _set_cell_text(row_obj.cells[ci], str(cell_val or ""))
+            # Normalizar las claves del item (quitar acentos comunes, lowercase)
+            item_norm = {k.lower().replace(" ", "_"): v for k, v in item.items()}
+
+            for ci, header in enumerate(real_headers):
+                if ci >= len(row_obj.cells):
+                    break
+                if "firma" in header:
+                    continue  # columna de firma siempre vacía
+                # Buscar el mejor match entre el header de la columna y las claves del item
+                cell_val = ""
+                for ik, iv in item_norm.items():
+                    if ik in header or header in ik or _keys_similar(ik, header):
+                        cell_val = str(iv or "")
+                        break
+                # Fallback: usar col_keys por posición
+                if not cell_val and ci < len(col_keys):
+                    cell_val = str(item_norm.get(col_keys[ci], ""))
+                _set_cell_text(row_obj.cells[ci], cell_val)
         else:
             _set_cell_text(row_obj.cells[0], str(item))
 
@@ -490,6 +514,24 @@ def _set_cell_text(cell, text: str):
         cell.paragraphs[0].text = text
     else:
         cell.add_paragraph(text)
+
+
+def _keys_similar(a: str, b: str) -> bool:
+    """Compara claves con sinónimos frecuentes en actas corporativas."""
+    aliases = {
+        "entidad": ("organizacion", "empresa", "compania", "institution"),
+        "nombre": ("participante", "persona", "asistente", "integrante"),
+        "cargo": ("rol", "puesto", "posicion", "funcion"),
+        "actividad": ("tarea", "compromiso", "accion", "item"),
+        "responsable": ("encargado", "asignado", "responsability"),
+        "estado": ("status", "avance", "progreso"),
+        "descripcion": ("detalle", "contenido", "tema", "observacion"),
+    }
+    for canonical, syns in aliases.items():
+        group = {canonical} | set(syns)
+        if a in group and b in group:
+            return True
+    return False
 
 
 # ─────────────────────────────────────────────────────────────────────────────
