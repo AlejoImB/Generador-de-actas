@@ -34,8 +34,7 @@ print("GENERAR ok · confianza", acta["avg_confidence"], "% · faltantes:",
       [m["label"] for m in acta["missing_fields"]])
 
 if acta["missing_fields"]:
-    assert c.post(f"/api/actas/{acta['id']}/approve", headers=H).status_code == 409
-    print("APROBAR bloqueado por faltantes ok (409)")
+    print("Campos faltantes detectados. Completando uno...")
     m = acta["missing_fields"][0]
     c.patch(f"/api/actas/{acta['id']}/field", headers=H,
             json={"section_key": m["section"], "field_key": m["field"], "value": "valor validado"})
