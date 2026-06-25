@@ -1,0 +1,118 @@
+/* ── LOGIN ────────────────────────────────────────────── */
+#login{min-height:100vh;display:grid;grid-template-columns:1fr 1fr}
+@media (max-width: 768px) {
+  #login { grid-template-columns: 1fr; }
+  .brand { min-height: 320px; padding: 36px 24px; }
+}
+.brand{
+  position:relative;overflow:hidden;
+  background:linear-gradient(150deg,#090F1E 0%,#0D1D35 45%,#122B52 100%);
+  color:#fff;padding:52px 56px;display:flex;flex-direction:column;justify-content:space-between;
+}
+.brand::before{content:'';position:absolute;inset:0;
+  background:radial-gradient(circle at 10% 80%,rgba(59,120,214,.2),transparent),
+             radial-gradient(circle at 90% 10%,rgba(111,163,232,.1),transparent);
+  pointer-events:none;z-index: 1}
+#networkCanvas{
+  position:absolute;top:0;left:0;width:100%;height:100%;
+  pointer-events:none;z-index:0;opacity:0.6;
+}
+.brand-content{position:relative;z-index:2}
+.brand-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.08);
+  border:1px solid rgba(255,255,255,.12);border-radius:100px;padding:6px 14px 6px 8px;
+  font-size:12px;font-weight:500;color:rgba(255,255,255,.7);margin-bottom:40px;backdrop-filter:blur(8px)}
+.brand-badge-dot{width:8px;height:8px;border-radius:50%;background:#34D399;box-shadow:0 0 8px #34D399}
+.brand h1{font-size:42px;font-weight:700;line-height:1.15;margin-bottom:20px;
+  background:linear-gradient(135deg,#fff 50%,rgba(255,255,255,.7));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.brand p{color:rgba(255,255,255,.55);font-size:15px;max-width:380px;line-height:1.7}
+.brand-feats{display:flex;flex-direction:column;gap:12px;margin-top:36px}
+.brand-feat{display:flex;align-items:center;gap:12px;font-size:13.5px;color:rgba(255,255,255,.65)}
+.brand-feat-icon{width:26px;height:26px;border-radius:8px;background:rgba(255,255,255,.08);display:grid;place-items:center;font-size:12px;flex-shrink:0;border: 1px solid rgba(255, 255, 255, 0.05);}
+.brand-footer{position:relative;font-size:12px;color:rgba(255,255,255,.3);z-index:2}
+
+.formwrap{display:flex;align-items:center;justify-content:center;padding:48px 40px;background:radial-gradient(circle at 100% 100%, var(--line2) 0%, #fff 80%);}
+.fcard{
+  width:100%;max-width:380px;
+  animation: fadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.fcard-eyebrow{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--p5);margin-bottom:10px}
+.fcard h2{font-size:30px;font-weight:700;color:var(--ink);margin-bottom:6px;letter-spacing:-0.03em}
+.fcard .sub{color:var(--sub);font-size:14px;margin-bottom:28px}
+.field{margin-bottom:18px}
+.field label{display:block;font-size:12.5px;font-weight:600;color:var(--sub);margin-bottom:7px;letter-spacing:.01em}
+.input-container {
+  position:relative;display:flex;align-items:center;width:100%;height:48px;
+  border:1.5px solid var(--line);border-radius:10px;background:var(--sur);transition:all 0.2s ease;
+}
+.input-container:focus-within {
+  border-color:var(--p4);box-shadow:0 0 0 4px rgba(59, 120, 214, 0.15);
+}
+.input-container > svg {
+  position:absolute;left:14px;color:var(--muted);transition:color 0.2s ease;pointer-events:none;
+}
+.input-container:focus-within > svg {
+  color:var(--p4);
+}
+.input-container input {
+  width:100%;height:100%;border:none;background:transparent;
+  padding:0 42px 0 42px;font-size:14px;font-family:inherit;color:var(--ink);outline:none;
+}
+.password-toggle {
+  position:absolute;right:14px;background:none;border:none;color:var(--muted);
+  cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;
+}
+.password-toggle:hover { color:var(--p4); }
+
+/* ── CAPTCHA ── */
+.captcha-container {
+  display:flex;align-items:center;justify-content:between;
+  border:1.5px solid var(--line);border-radius:10px;padding:10px 16px;
+  background:var(--line2);margin-bottom:20px;transition:border-color 0.2s ease;
+}
+.captcha-container:hover { border-color:var(--p2); }
+.captcha-left { display:flex;align-items:center;gap:12px;flex:1 }
+.captcha-checkbox {
+  width:24px;height:24px;border:2px solid var(--muted);border-radius:4px;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;
+  background:#fff;transition:all 0.2s ease;position:relative;
+}
+.captcha-checkbox.checked { border-color:var(--ok);background:var(--ok); }
+.captcha-checkbox.loading {
+  border:3px solid var(--p2);border-top-color:var(--p4);border-radius:50%;
+  animation:captchaSpin 0.8s linear infinite;width:22px;height:22px;
+}
+@keyframes captchaSpin { to { transform: rotate(360deg); } }
+.captcha-checkbox .checkmark {
+  width:10px;height:6px;border-left:2px solid #fff;border-bottom:2px solid #fff;
+  transform:rotate(-45deg) translate(1px, -1px);opacity:0;transition:opacity 0.15s ease;
+}
+.captcha-checkbox.checked .checkmark { opacity:1; }
+.captcha-label { font-size:13px;font-weight:500;color:var(--sub);user-select:none; }
+.captcha-right { display:flex;flex-direction:column;align-items:center;font-size:8px;color:var(--muted);gap:2px }
+.captcha-right svg { color:#4B8FF3; }
+
+.btn{height:48px;border-radius:10px;font-weight:600;font-size:14px;display:inline-flex;align-items:center;justify-content:center;gap:8px;transition:.18s;width:100%;cursor:pointer;letter-spacing:-.01em}
+.btn-primary{
+  position:relative;overflow:hidden;
+  background:linear-gradient(135deg,var(--p5) 0%,var(--p6) 100%);color:#fff;border:none;
+  box-shadow:0 4px 14px rgba(34,85,164,.25);transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.btn-primary:hover{transform:translateY(-1.5px);box-shadow:0 6px 20px rgba(34,85,164,.35);background:linear-gradient(135deg,var(--p4) 0%,var(--p5) 100%);}
+.btn-primary::after {
+  content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,0.15),transparent);
+  transition:all 0.6s ease;
+}
+.btn-primary:hover::after { left:100%; }
+.btn-primary:active{transform:translateY(0)}
+.btn-primary.disabled {
+  background:var(--line) !important;color:var(--muted) !important;
+  box-shadow:none !important;transform:none !important;cursor:not-allowed !important;
+}
+.btn-line{background:var(--sur);border:1.5px solid var(--line);color:var(--ink);transition:all 0.2s;}
+.btn-line:hover{border-color:var(--p3);background:var(--p1)}
+.err{color:var(--danger);font-size:13px;margin-top:10px;min-height:18px;font-weight:500}
